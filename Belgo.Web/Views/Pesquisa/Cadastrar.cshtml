@@ -1,0 +1,211 @@
+﻿@model Belgo.Web.Models.PesquisaModel
+@{
+    ViewBag.Title = "Cadastrar Pesquisa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="panel panel-default">
+    <div class="panel-heading">Dados da pesquisa</div>
+
+    @using (Html.BeginForm("Cadastrar", null, FormMethod.Post))
+    {
+        <div class="form-medio">
+            <div class="pull-right">
+                <button type="button" class="btn btn-link" title="Visualizar pesquisa" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-visualizar">
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Visualizar
+                </button>
+            </div>
+            <p class="clearfix"></p>
+
+            <div class="input-group">
+                <span class="input-group-addon">Nome da Pesquisa</span>
+                @Html.TextBoxFor(m => Model.Nome, new { @class = "form-control input-normal", placeholder = "Digite o nome da pesquisa", required = "required" })
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Index")" role="button" class="btn btn-default cancelar">Cancelar</a>
+                <button type="submit" class="btn btn-primary">@(Model != null ? "Salvar" : "Cadastrar")</button>
+            </div>
+
+
+            @if (Model.Perguntas.Count > 0)
+            {
+                <hr />
+                <div class="pull-right">
+                    <button type="button" class="btn btn-link" title="Cadastrar nova pergunta" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-cadastrar-pergunta">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Nova pergunta
+                    </button>
+                </div>
+                <p class="clearfix"></p>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Perguntas cadastradas</div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th class="text-center">Data do Cadastro</th>
+                                <th class="text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{foreach (var item in Model.Perguntas)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td>@item.Titulo</td>
+                                    <td class="text-center">@item.DataCadastro</td>
+                                    <td class="text-center">
+                                        <button type="button" role="button" class="btn btn-default btn-xs editar" title="Editar" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-cadastrar-pergunta">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-xs editar" title="Excluir" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-excluir">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>
+<!--modal troca de senha-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Excluir pergunta</h4>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir esta pergunta?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a href="@Url.Action("ExcluirPergunta", new {id = 0 })" role="button" class="btn btn-primary">Excluir</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal troca de senha-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-cadastrar-pergunta">
+    @using (Html.BeginForm("CadastrarPergunta", null, FormMethod.Post))
+    {
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cadastrar pergunta</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon">Pergunta</span>
+                        <input type="text" class="form-control input-normal" placeholder="Título da pergunta" aria-describedby="basic-addon1" required autofocus>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Resposta</span>
+                        <input type="text" class="form-control input-normal" placeholder="Descrição da resposta" aria-describedby="basic-addon1" required autofocus>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Tipo da resposta</span>
+                        <select class="form-control">
+                            <option>Única escolha</option>
+                            <option>Múltipla escolha</option>
+                            <option>Dissertativa</option>
+                            <option>Outras</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index")" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" role="button" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!--modal preview-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-visualizar">
+    @using (Html.BeginForm("Publicar", null, FormMethod.Post))
+    {
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Visualizar pesquisa</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Pergunta 1</label>
+                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Pergunta 2</label>
+                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Pergunta 3</label>
+                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Pergunta 4</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                Resposta 1
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                Resposta 2
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
+                                Resposta 3
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Pergunta 5</label>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                Resposta 1
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                Resposta 2
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                Resposta 3
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index")" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+                    <button type="submit" role="button" class="btn btn-primary">Publicar</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+

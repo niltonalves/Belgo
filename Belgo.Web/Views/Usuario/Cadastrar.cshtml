@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Cadastrar usuário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Dados do usuário</div>
+    @using (Html.BeginForm("Cadastrar", null, FormMethod.Post))
+    {
+        <div class="form-medio">
+            <div class="input-group">
+                <span class="input-group-addon">Nome</span>
+                <input type="text" class="form-control input-normal" placeholder="Nome do usuário" aria-describedby="basic-addon1" required autofocus>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">E-mail</span>
+                <input type="email" class="form-control input-normal" placeholder="E-mail do usuário" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Senha</span>
+                <input type="password" class="form-control input-normal" placeholder="Senha do usuário" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $(".cancelar").click(function () {
+                history.back();
+            });
+        })
+    </script>
+}

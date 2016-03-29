@@ -1,0 +1,24 @@
+﻿@model Belgo.Web.Models.PesquisaModel
+@{
+    ViewBag.Title = "Cadastrar Pergunta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Pesquisa: Título da pesquisa 1</div>
+    @using (Html.BeginForm("CadastrarPergunta", null, FormMethod.Post))
+    {
+        <div class="form-medio">
+            <div class="input-group">
+                <span class="input-group-addon">Pergunta</span>
+                <input type="text" class="form-control input-normal" placeholder="Título da pergunta" aria-describedby="basic-addon1" required autofocus>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+                <button type="button" class="btn btn-default cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-primary">@(Model != null ? "Salvar" : "Cadastrar")</button>
+        </div>
+    }
+</div>
