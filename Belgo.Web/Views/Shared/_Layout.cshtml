@@ -2,7 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
     <link rel="apple-touch-icon" sizes="57x57" href="~/Content/images/icons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="~/Content/images/icons/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="~/Content/images/icons/apple-icon-72x72.png">
@@ -20,26 +23,32 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="~/Content/images/icons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
     <title>Belgo - @ViewBag.Title</title>
     @Styles.Render("~/Content/Bootstrap")
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/FontAwesome")
+    
 </head>
 <body role="document">
     @Html.Partial("_Menu")
     <div class="container" role="main">
-        <div class="page-header">
-            <h3><small><b>@ViewBag.Title</b> </small> </h3>
-        </div>
-        @Html.Partial("_alertas")
+        <div class="miolo">
+            <div class="page-header">
+                <h3><small><span class="glyphicon glyphicon-link red " aria-hidden="true"></span> <strong>@ViewBag.Title</strong> </small> </h3>
+            </div>
+            @Html.Partial("_alertas")
 
-        @RenderBody()
-    </div>
-    <footer class="footer">
-        <div class="container">
-            <p class="text-muted">Belgo Arames - 2016</p>
+            @RenderBody()
         </div>
-    </footer>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>Belgo Arames - @DateTime.Now.Year</p>
+        </div>
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/Scripts/Bootstrap")
     @RenderSection("scripts", required: false)

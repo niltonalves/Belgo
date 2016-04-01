@@ -12,16 +12,16 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-circle-arrow-right btn-sm" aria-hidden="true"></span>Gerenciar Acesso</a>
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Acesso</a>
                     <ul class="dropdown-menu">
-                        <li><a href="@Url.Action("Index", "Usuario")">Usuário</a></li>
+                        <li><a href="@Url.Action("Index", "Usuario")">Listar Usuários</a></li>
                         <li><a href="@Url.Action("Cadastrar", "Usuario")">Cadastrar Usuário</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-circle-arrow-right btn-sm" aria-hidden="true"></span>Gerenciar Pesquisas</a>
+                    <a style="height:55px;"  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Pesquisas</a>
                     <ul class="dropdown-menu">
-                        <li><a href="@Url.Action("Index", "Pesquisa")">Pesquisas</a></li>
+                        <li><a href="@Url.Action("Index", "Pesquisa")">Listar Pesquisas</a></li>
                         <li><a href="@Url.Action("Cadastrar", "Pesquisa")">Cadastrar Pesquisas</a></li>
                     </ul>
                 </li>
@@ -29,7 +29,7 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user btn-sm" aria-hidden="true"></span> Admin</a>
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> Admin</a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Cadastrar", "Usuario")">Meus dados</a></li>
                         <li><a href="@Url.Action("Sair", "Login")">Sair</a></li>

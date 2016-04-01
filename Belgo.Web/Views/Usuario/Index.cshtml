@@ -12,18 +12,19 @@
 <p class="clearfix"></p>
 
 <div class="panel panel-default">
+
     <!-- Default panel contents -->
-    <div class="panel-heading">Usuários Cadastrados</div>
+    <div class="panel-heading gray">Usuários Cadastrados</div>
 
     <!-- Table -->
-    <table class="table">
+    <table class="table table-hover">
         <thead>
-            <tr>
+            <tr class="gray">
                 <th>ID</th>
                 <th>Nome</th>
                 <th>E-mail</th>
-                <th>Data do Cadastro</th>
-                <th>Data Último Acesso</th>
+                @*<th>Data do Cadastro</th>
+                <th>Data Último Acesso</th>*@
                 <th>Status</th>
                 <th class="text-center">Ação</th>
             </tr>
@@ -37,14 +38,14 @@
                         <td>@item.ID</td>
                         <td>@item.Nome</td>
                         <td>@item.Email</td>
-                        <td>@item.DataCadastro.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@item.DataUltimoAcesso.ToString("dd/MM/yyyy HH:mm")</td>
+                        @*<td>@item.DataCadastro.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.DataUltimoAcesso.ToString("dd/MM/yyyy HH:mm")</td>*@
                         <td>@status</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-default btn-xs editar" title="Editar" data-tooltip="tooltip">
+                            <button type="button" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-xs" title="Resetar senha" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-troca-senha">
+                            <button type="button" class="btn btn-default btn-xs red" title="Resetar senha" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-troca-senha">
                                 <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                             </button>
                         </td>
@@ -69,7 +70,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a href="@Url.Action("Resetar", new {id = 0 })" role="button" class="btn btn-primary">Resetar</a>
+                <a href="@Url.Action("Resetar", new {id = 0 })" role="button" class="btn btn-danger">Resetar</a>
             </div>
         </div>
     </div>

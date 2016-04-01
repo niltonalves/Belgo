@@ -38,14 +38,14 @@ namespace Belgo.Web.Controllers
         {
             var model = new PesquisaModel();
             model.ID = 1;
-            model.Perguntas = this.CarregarPergunta();
+            model.Perguntas = this.CarregarResposta();
             return View(model);
         }
         [HttpPost]
         public ActionResult CadastrarPergunta(PesquisaModel model)
         {
             this.MostrarAlerta(TipoAlerta.Sucesso, "Pergunta cadastrada com sucesso.");
-            return RedirectToAction("Cadastrar", new {id = 1});
+            return RedirectToAction("CadastrarPergunta", new {id = 1});
         }
         [HttpPost]
         public ActionResult Publicar(PesquisaModel model)
@@ -75,6 +75,22 @@ namespace Belgo.Web.Controllers
             }
             return lista;
         }
+
+        private List<PesquisaModel.PerguntaModel> CarregarResposta()
+        {
+            var lista = new List<PesquisaModel.PerguntaModel>();
+            for (int i = 1; i < 11; i++)
+            {
+                lista.Add(new Belgo.Web.Models.PesquisaModel.PerguntaModel()
+                {
+                    ID = i,
+                    Titulo = "Título da resposta " + i,
+                    DataCadastro = DateTime.Now.AddDays(-i)
+                });
+            }
+            return lista;
+        }
+
 
         private List<PesquisaModel> CarregarPesquisa()
         {

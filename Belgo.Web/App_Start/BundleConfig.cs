@@ -30,6 +30,10 @@ namespace Belgo.Web
             bundles.Add(new ScriptBundle("~/Scripts/Bootstrap").Include(
                         "~/Scripts/bootstrap.js"));
 
+            //font-awesome
+            bundles.Add(new StyleBundle("~/Content/FontAwesome").Include("~/Content/font-awesome.css"));
+
+
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",
@@ -43,6 +47,8 @@ namespace Belgo.Web
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

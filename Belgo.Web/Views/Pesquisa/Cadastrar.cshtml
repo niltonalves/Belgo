@@ -5,7 +5,7 @@
 
 }
 <div class="panel panel-default">
-    <div class="panel-heading">Dados da pesquisa</div>
+    <div class="panel-heading gray"> Dados da pesquisa</div>
 
     @using (Html.BeginForm("Cadastrar", null, FormMethod.Post))
     {
@@ -23,7 +23,7 @@
             </div>
             <div class="modal-footer">
                 <a href="@Url.Action("Index")" role="button" class="btn btn-default cancelar">Cancelar</a>
-                <button type="submit" class="btn btn-primary">@(Model != null ? "Salvar" : "Cadastrar")</button>
+                <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>
             </div>
 
 
@@ -38,10 +38,10 @@
                 <p class="clearfix"></p>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Perguntas cadastradas</div>
+                    <div class="panel-heading gray">Perguntas cadastradas</div>
                     <table class="table table-hover">
                         <thead>
-                            <tr>
+                            <tr class="gray">
                                 <th>ID</th>
                                 <th>Título</th>
                                 <th class="text-center">Data do Cadastro</th>
@@ -53,13 +53,13 @@
                             {
                                 <tr>
                                     <td>@item.ID</td>
-                                    <td>@item.Titulo</td>
+                                    <td>@item.Titulo</td>'
                                     <td class="text-center">@item.DataCadastro</td>
                                     <td class="text-center">
-                                        <button type="button" role="button" class="btn btn-default btn-xs editar" title="Editar" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-cadastrar-pergunta">
+                                        <a href="@Url.Action("CadastrarPergunta")" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip" data-toggle="modal">
                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-xs editar" title="Excluir" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-excluir">
+                                        </a>
+                                        <button type="button" class="btn btn-default btn-xs editar red" title="Excluir" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-excluir">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         </button>
                                     </td>
@@ -86,7 +86,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a href="@Url.Action("ExcluirPergunta", new {id = 0 })" role="button" class="btn btn-primary">Excluir</a>
+                <a href="@Url.Action("ExcluirPergunta", new {id = 0 })" role="button" class="btn btn-danger">Excluir</a>
             </div>
         </div>
     </div>
@@ -123,7 +123,7 @@
                 </div>
                 <div class="modal-footer">
                     <a href="@Url.Action("Index")" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-                    <button type="submit" role="button" class="btn btn-primary">Cadastrar</button>
+                    <button type="submit" role="button" class="btn btn-danger">Cadastrar</button>
                 </div>
             </div>
         </div>
@@ -200,12 +200,9 @@
                 </div>
                 <div class="modal-footer">
                     <a href="@Url.Action("Index")" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-                    <button type="submit" role="button" class="btn btn-primary">Publicar</button>
+                    <button type="submit" role="button" class="btn btn-danger">Publicar</button>
                 </div>
             </div>
         </div>
     }
 </div>
-
-
-

@@ -4,6 +4,15 @@
     color: #232323;
     background-color: #fff;
 }*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: 'Lato', sans-serif;
+}
 
 header, footer, nav, section {
     display: block;
@@ -61,7 +70,7 @@ textarea {
 }
 
 .form-login {
-    max-width: 330px;
+    max-width: 360px;
     padding: 15px;
     margin: auto;
 }
@@ -81,14 +90,35 @@ h2 {
 .red {
     color: #e31d1a;
 }
+
 .green {
     color: #00a423;
 }
 
+.gray {
+    color: #888888 !important;
+}
+
 .footer {
+    border-top:1px solid #f9f9f9;
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px;
-    background-color: #f5f5f5;
+    /* Set the fixed height of the footer here */
+    height: 30px;
+    background-color: #fff;
+    text-align:center;
+    vertical-align:middle;
+    color:#bababa;
+    
+}
+.footer p{margin:0px !important; }
+
+.miolo {
+    padding: 5px 5px 5px 5px;
+}
+
+hr {
+    border: 1px solid #ffeeee;
+    margin: 5px;
 }
