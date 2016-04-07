@@ -5,7 +5,7 @@
 
 }
 <div class="panel panel-default">
-    <div class="panel-heading gray"> Dados da pergunta</div>
+    <div class="panel-heading gray">Dados da pergunta</div>
 
     @using (Html.BeginForm("Cadastrar", null, FormMethod.Post))
     {
@@ -31,11 +31,20 @@
                 <span class="input-group-addon">Título da pergunta</span>
                 @Html.TextBoxFor(m => Model.Nome, new { @class = "form-control input-normal", placeholder = "Digite o título da pergunta", required = "required" })
             </div>
+            <div class="input-group">
+                <span class="input-group-addon">Tipo da pergunta&nbsp;&nbsp;&nbsp;</span>
+                <select class="form-control">
+                    <option>Única escolha</option>
+                    <option>Múltipla escolha</option>
+                    <option>Dissertativa</option>
+                    <option>Outras</option>
+                </select>
+            </div>
+
             <div class="modal-footer">
                 <a href="@Url.Action("Index")" role="button" class="btn btn-default cancelar">Cancelar</a>
                 <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>
             </div>
-
 
             @if (Model.Perguntas.Count > 0)
             {
@@ -115,15 +124,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
-                        <span class="input-group-addon">Tipo da resposta</span>
-                        <select class="form-control">
-                            <option>Única escolha</option>
-                            <option>Múltipla escolha</option>
-                            <option>Dissertativa</option>
-                            <option>Outras</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
                         <span class="input-group-addon">Resposta</span>
                         <input type="text" class="form-control input-normal" placeholder="Descrição da resposta" aria-describedby="basic-addon1" required autofocus>
                     </div>
@@ -150,15 +150,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Pergunta 1</label>
-                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Digite sua resposta"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="">Pergunta 2</label>
-                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Digite sua resposta"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="">Pergunta 3</label>
-                        <textarea class="form-control" rows="3" placeholder="Digita sua resposta"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Digite sua resposta"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="">Pergunta 4</label>

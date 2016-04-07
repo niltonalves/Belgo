@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Belgo_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CAD_PARTICIPACAO">
+          <Key>
+            <PropertyRef Name="COD_PARTICIPACAO" />
+          </Key>
+          <Property Name="COD_PARTICIPACAO" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="COD_PERGUNTA" Type="bigint" />
+          <Property Name="COD_RESPOSTA" Type="bigint" />
+          <Property Name="DSC_RESPOSTA_DISSERTATIVA" Type="varchar" MaxLength="4000" />
+          <Property Name="IND_RESPOSTA_NULA" Type="char" MaxLength="1" />
+          <Property Name="DTA_PARTICIPACAO" Type="datetime" />
+          <Property Name="DTA_SINCRONIZACAO" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CAD_PERGUNTA">
+          <Key>
+            <PropertyRef Name="COD_PERGUNTA" />
+          </Key>
+          <Property Name="COD_PERGUNTA" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="COD_PESQUISA" Type="bigint" Nullable="false" />
+          <Property Name="DSC_PERGUNTA" Type="varchar" MaxLength="500" />
+          <Property Name="IND_TPO_PERGUNTA" Type="char" MaxLength="1" />
+          <Property Name="NUM_ORDEM_PERGUNTA" Type="int" />
+          <Property Name="COD_USER_CRIACAO" Type="bigint" />
+          <Property Name="DTA_CRIACAO" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CAD_PESQUISA">
+          <Key>
+            <PropertyRef Name="COD_PESQUISA" />
+          </Key>
+          <Property Name="COD_PESQUISA" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOM_PESQUISA" Type="varchar" MaxLength="200" />
+          <Property Name="IND_FECHADO" Type="bit" />
+          <Property Name="COD_USER_CRIACAO" Type="bigint" />
+          <Property Name="DTA_CRIACAO" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CAD_RESPOSTA">
+          <Key>
+            <PropertyRef Name="COD_RESPOSTA" />
+          </Key>
+          <Property Name="COD_RESPOSTA" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="COD_PERGUNTA" Type="bigint" Nullable="false" />
+          <Property Name="DSC_RESPOSTA" Type="varchar" MaxLength="200" />
+          <Property Name="COD_USER_CRIACAO" Type="bigint" />
+          <Property Name="DTA_CRIACAO" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SCA_USUARIO">
+          <Key>
+            <PropertyRef Name="COD_USUARIO" />
+          </Key>
+          <Property Name="COD_USUARIO" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOM_USUARIO" Type="varchar" MaxLength="200" />
+          <Property Name="DSC_EMAIL" Type="varchar" MaxLength="200" />
+          <Property Name="PSW_SENHA" Type="varchar" MaxLength="200" />
+          <Property Name="IND_EXCLUIDO" Type="char" MaxLength="1" />
+        </EntityType>
+        <Association Name="FK_CAD_PARTICIPACAO_CAD_PERGUNTA">
+          <End Role="CAD_PERGUNTA" Type="Self.CAD_PERGUNTA" Multiplicity="0..1" />
+          <End Role="CAD_PARTICIPACAO" Type="Self.CAD_PARTICIPACAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Principal>
+            <Dependent Role="CAD_PARTICIPACAO">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PARTICIPACAO_CAD_RESPOSTA">
+          <End Role="CAD_RESPOSTA" Type="Self.CAD_RESPOSTA" Multiplicity="0..1" />
+          <End Role="CAD_PARTICIPACAO" Type="Self.CAD_PARTICIPACAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_RESPOSTA" />
+            </Principal>
+            <Dependent Role="CAD_PARTICIPACAO">
+              <PropertyRef Name="COD_RESPOSTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PERGUNTA_CAD_PESQUISA">
+          <End Role="CAD_PESQUISA" Type="Self.CAD_PESQUISA" Multiplicity="1" />
+          <End Role="CAD_PERGUNTA" Type="Self.CAD_PERGUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PESQUISA">
+              <PropertyRef Name="COD_PESQUISA" />
+            </Principal>
+            <Dependent Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PESQUISA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PERGUNTA_SCA_USUARIO">
+          <End Role="SCA_USUARIO" Type="Self.SCA_USUARIO" Multiplicity="0..1" />
+          <End Role="CAD_PERGUNTA" Type="Self.CAD_PERGUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PESQUISA_SCA_USUARIO">
+          <End Role="SCA_USUARIO" Type="Self.SCA_USUARIO" Multiplicity="0..1" />
+          <End Role="CAD_PESQUISA" Type="Self.CAD_PESQUISA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_PESQUISA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_RESPOSTA_CAD_PERGUNTA">
+          <End Role="CAD_PERGUNTA" Type="Self.CAD_PERGUNTA" Multiplicity="1" />
+          <End Role="CAD_RESPOSTA" Type="Self.CAD_RESPOSTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Principal>
+            <Dependent Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_RESPOSTA_SCA_USUARIO">
+          <End Role="SCA_USUARIO" Type="Self.SCA_USUARIO" Multiplicity="0..1" />
+          <End Role="CAD_RESPOSTA" Type="Self.CAD_RESPOSTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Belgo_ModelStoreContainer">
+          <EntitySet Name="CAD_PARTICIPACAO" EntityType="Self.CAD_PARTICIPACAO" Schema="Admin" store:Type="Tables" />
+          <EntitySet Name="CAD_PERGUNTA" EntityType="Self.CAD_PERGUNTA" Schema="Admin" store:Type="Tables" />
+          <EntitySet Name="CAD_PESQUISA" EntityType="Self.CAD_PESQUISA" Schema="Admin" store:Type="Tables" />
+          <EntitySet Name="CAD_RESPOSTA" EntityType="Self.CAD_RESPOSTA" Schema="Admin" store:Type="Tables" />
+          <EntitySet Name="SCA_USUARIO" EntityType="Self.SCA_USUARIO" Schema="Admin" store:Type="Tables" />
+          <AssociationSet Name="FK_CAD_PARTICIPACAO_CAD_PERGUNTA" Association="Self.FK_CAD_PARTICIPACAO_CAD_PERGUNTA">
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+            <End Role="CAD_PARTICIPACAO" EntitySet="CAD_PARTICIPACAO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PARTICIPACAO_CAD_RESPOSTA" Association="Self.FK_CAD_PARTICIPACAO_CAD_RESPOSTA">
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+            <End Role="CAD_PARTICIPACAO" EntitySet="CAD_PARTICIPACAO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PERGUNTA_CAD_PESQUISA" Association="Self.FK_CAD_PERGUNTA_CAD_PESQUISA">
+            <End Role="CAD_PESQUISA" EntitySet="CAD_PESQUISA" />
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PERGUNTA_SCA_USUARIO" Association="Self.FK_CAD_PERGUNTA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PESQUISA_SCA_USUARIO" Association="Self.FK_CAD_PESQUISA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_PESQUISA" EntitySet="CAD_PESQUISA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_RESPOSTA_CAD_PERGUNTA" Association="Self.FK_CAD_RESPOSTA_CAD_PERGUNTA">
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_RESPOSTA_SCA_USUARIO" Association="Self.FK_CAD_RESPOSTA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Belgo_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="CAD_PARTICIPACAO" EntityType="Belgo_Model.CAD_PARTICIPACAO" />
+          <EntitySet Name="CAD_PERGUNTA" EntityType="Belgo_Model.CAD_PERGUNTA" />
+          <EntitySet Name="CAD_PESQUISA" EntityType="Belgo_Model.CAD_PESQUISA" />
+          <EntitySet Name="CAD_RESPOSTA" EntityType="Belgo_Model.CAD_RESPOSTA" />
+          <EntitySet Name="SCA_USUARIO" EntityType="Belgo_Model.SCA_USUARIO" />
+          <AssociationSet Name="FK_CAD_PARTICIPACAO_CAD_PERGUNTA" Association="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_PERGUNTA">
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+            <End Role="CAD_PARTICIPACAO" EntitySet="CAD_PARTICIPACAO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PARTICIPACAO_CAD_RESPOSTA" Association="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_RESPOSTA">
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+            <End Role="CAD_PARTICIPACAO" EntitySet="CAD_PARTICIPACAO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PERGUNTA_CAD_PESQUISA" Association="Belgo_Model.FK_CAD_PERGUNTA_CAD_PESQUISA">
+            <End Role="CAD_PESQUISA" EntitySet="CAD_PESQUISA" />
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PERGUNTA_SCA_USUARIO" Association="Belgo_Model.FK_CAD_PERGUNTA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_RESPOSTA_CAD_PERGUNTA" Association="Belgo_Model.FK_CAD_RESPOSTA_CAD_PERGUNTA">
+            <End Role="CAD_PERGUNTA" EntitySet="CAD_PERGUNTA" />
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_PESQUISA_SCA_USUARIO" Association="Belgo_Model.FK_CAD_PESQUISA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_PESQUISA" EntitySet="CAD_PESQUISA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CAD_RESPOSTA_SCA_USUARIO" Association="Belgo_Model.FK_CAD_RESPOSTA_SCA_USUARIO">
+            <End Role="SCA_USUARIO" EntitySet="SCA_USUARIO" />
+            <End Role="CAD_RESPOSTA" EntitySet="CAD_RESPOSTA" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CAD_PARTICIPACAO">
+          <Key>
+            <PropertyRef Name="COD_PARTICIPACAO" />
+          </Key>
+          <Property Name="COD_PARTICIPACAO" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="COD_PERGUNTA" Type="Int64" />
+          <Property Name="COD_RESPOSTA" Type="Int64" />
+          <Property Name="DSC_RESPOSTA_DISSERTATIVA" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="IND_RESPOSTA_NULA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DTA_PARTICIPACAO" Type="DateTime" Precision="3" />
+          <Property Name="DTA_SINCRONIZACAO" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CAD_PERGUNTA" Relationship="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_PERGUNTA" FromRole="CAD_PARTICIPACAO" ToRole="CAD_PERGUNTA" />
+          <NavigationProperty Name="CAD_RESPOSTA" Relationship="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_RESPOSTA" FromRole="CAD_PARTICIPACAO" ToRole="CAD_RESPOSTA" />
+        </EntityType>
+        <EntityType Name="CAD_PERGUNTA">
+          <Key>
+            <PropertyRef Name="COD_PERGUNTA" />
+          </Key>
+          <Property Name="COD_PERGUNTA" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="COD_PESQUISA" Type="Int64" Nullable="false" />
+          <Property Name="DSC_PERGUNTA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IND_TPO_PERGUNTA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="NUM_ORDEM_PERGUNTA" Type="Int32" />
+          <Property Name="COD_USER_CRIACAO" Type="Int64" />
+          <Property Name="DTA_CRIACAO" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CAD_PARTICIPACAO" Relationship="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_PERGUNTA" FromRole="CAD_PERGUNTA" ToRole="CAD_PARTICIPACAO" />
+          <NavigationProperty Name="CAD_PESQUISA" Relationship="Belgo_Model.FK_CAD_PERGUNTA_CAD_PESQUISA" FromRole="CAD_PERGUNTA" ToRole="CAD_PESQUISA" />
+          <NavigationProperty Name="SCA_USUARIO" Relationship="Belgo_Model.FK_CAD_PERGUNTA_SCA_USUARIO" FromRole="CAD_PERGUNTA" ToRole="SCA_USUARIO" />
+          <NavigationProperty Name="CAD_RESPOSTA" Relationship="Belgo_Model.FK_CAD_RESPOSTA_CAD_PERGUNTA" FromRole="CAD_PERGUNTA" ToRole="CAD_RESPOSTA" />
+        </EntityType>
+        <EntityType Name="CAD_PESQUISA">
+          <Key>
+            <PropertyRef Name="COD_PESQUISA" />
+          </Key>
+          <Property Name="COD_PESQUISA" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOM_PESQUISA" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IND_FECHADO" Type="Boolean" />
+          <Property Name="COD_USER_CRIACAO" Type="Int64" />
+          <Property Name="DTA_CRIACAO" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CAD_PERGUNTA" Relationship="Belgo_Model.FK_CAD_PERGUNTA_CAD_PESQUISA" FromRole="CAD_PESQUISA" ToRole="CAD_PERGUNTA" />
+          <NavigationProperty Name="SCA_USUARIO" Relationship="Belgo_Model.FK_CAD_PESQUISA_SCA_USUARIO" FromRole="CAD_PESQUISA" ToRole="SCA_USUARIO" />
+        </EntityType>
+        <EntityType Name="CAD_RESPOSTA">
+          <Key>
+            <PropertyRef Name="COD_RESPOSTA" />
+          </Key>
+          <Property Name="COD_RESPOSTA" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="COD_PERGUNTA" Type="Int64" Nullable="false" />
+          <Property Name="DSC_RESPOSTA" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="COD_USER_CRIACAO" Type="Int64" />
+          <Property Name="DTA_CRIACAO" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CAD_PARTICIPACAO" Relationship="Belgo_Model.FK_CAD_PARTICIPACAO_CAD_RESPOSTA" FromRole="CAD_RESPOSTA" ToRole="CAD_PARTICIPACAO" />
+          <NavigationProperty Name="CAD_PERGUNTA" Relationship="Belgo_Model.FK_CAD_RESPOSTA_CAD_PERGUNTA" FromRole="CAD_RESPOSTA" ToRole="CAD_PERGUNTA" />
+          <NavigationProperty Name="SCA_USUARIO" Relationship="Belgo_Model.FK_CAD_RESPOSTA_SCA_USUARIO" FromRole="CAD_RESPOSTA" ToRole="SCA_USUARIO" />
+        </EntityType>
+        <EntityType Name="SCA_USUARIO">
+          <Key>
+            <PropertyRef Name="COD_USUARIO" />
+          </Key>
+          <Property Name="COD_USUARIO" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOM_USUARIO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="DSC_EMAIL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PSW_SENHA" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IND_EXCLUIDO" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="CAD_PERGUNTA" Relationship="Belgo_Model.FK_CAD_PERGUNTA_SCA_USUARIO" FromRole="SCA_USUARIO" ToRole="CAD_PERGUNTA" />
+          <NavigationProperty Name="CAD_PESQUISA" Relationship="Belgo_Model.FK_CAD_PESQUISA_SCA_USUARIO" FromRole="SCA_USUARIO" ToRole="CAD_PESQUISA" />
+          <NavigationProperty Name="CAD_RESPOSTA" Relationship="Belgo_Model.FK_CAD_RESPOSTA_SCA_USUARIO" FromRole="SCA_USUARIO" ToRole="CAD_RESPOSTA" />
+        </EntityType>
+        <Association Name="FK_CAD_PARTICIPACAO_CAD_PERGUNTA">
+          <End Type="Belgo_Model.CAD_PERGUNTA" Role="CAD_PERGUNTA" Multiplicity="0..1" />
+          <End Type="Belgo_Model.CAD_PARTICIPACAO" Role="CAD_PARTICIPACAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Principal>
+            <Dependent Role="CAD_PARTICIPACAO">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PARTICIPACAO_CAD_RESPOSTA">
+          <End Type="Belgo_Model.CAD_RESPOSTA" Role="CAD_RESPOSTA" Multiplicity="0..1" />
+          <End Type="Belgo_Model.CAD_PARTICIPACAO" Role="CAD_PARTICIPACAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_RESPOSTA" />
+            </Principal>
+            <Dependent Role="CAD_PARTICIPACAO">
+              <PropertyRef Name="COD_RESPOSTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PERGUNTA_CAD_PESQUISA">
+          <End Type="Belgo_Model.CAD_PESQUISA" Role="CAD_PESQUISA" Multiplicity="1" />
+          <End Type="Belgo_Model.CAD_PERGUNTA" Role="CAD_PERGUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PESQUISA">
+              <PropertyRef Name="COD_PESQUISA" />
+            </Principal>
+            <Dependent Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PESQUISA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PERGUNTA_SCA_USUARIO">
+          <End Type="Belgo_Model.SCA_USUARIO" Role="SCA_USUARIO" Multiplicity="0..1" />
+          <End Type="Belgo_Model.CAD_PERGUNTA" Role="CAD_PERGUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_RESPOSTA_CAD_PERGUNTA">
+          <End Type="Belgo_Model.CAD_PERGUNTA" Role="CAD_PERGUNTA" Multiplicity="1" />
+          <End Type="Belgo_Model.CAD_RESPOSTA" Role="CAD_RESPOSTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAD_PERGUNTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Principal>
+            <Dependent Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_PERGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_PESQUISA_SCA_USUARIO">
+          <End Type="Belgo_Model.SCA_USUARIO" Role="SCA_USUARIO" Multiplicity="0..1" />
+          <End Type="Belgo_Model.CAD_PESQUISA" Role="CAD_PESQUISA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_PESQUISA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CAD_RESPOSTA_SCA_USUARIO">
+          <End Type="Belgo_Model.SCA_USUARIO" Role="SCA_USUARIO" Multiplicity="0..1" />
+          <End Type="Belgo_Model.CAD_RESPOSTA" Role="CAD_RESPOSTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SCA_USUARIO">
+              <PropertyRef Name="COD_USUARIO" />
+            </Principal>
+            <Dependent Role="CAD_RESPOSTA">
+              <PropertyRef Name="COD_USER_CRIACAO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Belgo_ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="CAD_PARTICIPACAO">
+            <EntityTypeMapping TypeName="Belgo_Model.CAD_PARTICIPACAO">
+              <MappingFragment StoreEntitySet="CAD_PARTICIPACAO">
+                <ScalarProperty Name="DTA_SINCRONIZACAO" ColumnName="DTA_SINCRONIZACAO" />
+                <ScalarProperty Name="DTA_PARTICIPACAO" ColumnName="DTA_PARTICIPACAO" />
+                <ScalarProperty Name="IND_RESPOSTA_NULA" ColumnName="IND_RESPOSTA_NULA" />
+                <ScalarProperty Name="DSC_RESPOSTA_DISSERTATIVA" ColumnName="DSC_RESPOSTA_DISSERTATIVA" />
+                <ScalarProperty Name="COD_RESPOSTA" ColumnName="COD_RESPOSTA" />
+                <ScalarProperty Name="COD_PERGUNTA" ColumnName="COD_PERGUNTA" />
+                <ScalarProperty Name="COD_PARTICIPACAO" ColumnName="COD_PARTICIPACAO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAD_PERGUNTA">
+            <EntityTypeMapping TypeName="Belgo_Model.CAD_PERGUNTA">
+              <MappingFragment StoreEntitySet="CAD_PERGUNTA">
+                <ScalarProperty Name="DTA_CRIACAO" ColumnName="DTA_CRIACAO" />
+                <ScalarProperty Name="COD_USER_CRIACAO" ColumnName="COD_USER_CRIACAO" />
+                <ScalarProperty Name="NUM_ORDEM_PERGUNTA" ColumnName="NUM_ORDEM_PERGUNTA" />
+                <ScalarProperty Name="IND_TPO_PERGUNTA" ColumnName="IND_TPO_PERGUNTA" />
+                <ScalarProperty Name="DSC_PERGUNTA" ColumnName="DSC_PERGUNTA" />
+                <ScalarProperty Name="COD_PESQUISA" ColumnName="COD_PESQUISA" />
+                <ScalarProperty Name="COD_PERGUNTA" ColumnName="COD_PERGUNTA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAD_PESQUISA">
+            <EntityTypeMapping TypeName="Belgo_Model.CAD_PESQUISA">
+              <MappingFragment StoreEntitySet="CAD_PESQUISA">
+                <ScalarProperty Name="DTA_CRIACAO" ColumnName="DTA_CRIACAO" />
+                <ScalarProperty Name="COD_USER_CRIACAO" ColumnName="COD_USER_CRIACAO" />
+                <ScalarProperty Name="IND_FECHADO" ColumnName="IND_FECHADO" />
+                <ScalarProperty Name="NOM_PESQUISA" ColumnName="NOM_PESQUISA" />
+                <ScalarProperty Name="COD_PESQUISA" ColumnName="COD_PESQUISA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAD_RESPOSTA">
+            <EntityTypeMapping TypeName="Belgo_Model.CAD_RESPOSTA">
+              <MappingFragment StoreEntitySet="CAD_RESPOSTA">
+                <ScalarProperty Name="DTA_CRIACAO" ColumnName="DTA_CRIACAO" />
+                <ScalarProperty Name="COD_USER_CRIACAO" ColumnName="COD_USER_CRIACAO" />
+                <ScalarProperty Name="DSC_RESPOSTA" ColumnName="DSC_RESPOSTA" />
+                <ScalarProperty Name="COD_PERGUNTA" ColumnName="COD_PERGUNTA" />
+                <ScalarProperty Name="COD_RESPOSTA" ColumnName="COD_RESPOSTA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SCA_USUARIO">
+            <EntityTypeMapping TypeName="Belgo_Model.SCA_USUARIO">
+              <MappingFragment StoreEntitySet="SCA_USUARIO">
+                <ScalarProperty Name="IND_EXCLUIDO" ColumnName="IND_EXCLUIDO" />
+                <ScalarProperty Name="PSW_SENHA" ColumnName="PSW_SENHA" />
+                <ScalarProperty Name="DSC_EMAIL" ColumnName="DSC_EMAIL" />
+                <ScalarProperty Name="NOM_USUARIO" ColumnName="NOM_USUARIO" />
+                <ScalarProperty Name="COD_USUARIO" ColumnName="COD_USUARIO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

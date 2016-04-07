@@ -1,21 +1,12 @@
-﻿/*body {
-    font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #fff;
-}*/
-html {
-    position: relative;
-    min-height: 100%;
-}
-
+﻿ html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
 body {
-    margin-bottom: 60px;
+    
     font-family: 'Lato', sans-serif;
-}
-
-header, footer, nav, section {
-    display: block;
+    
 }
 
 
@@ -70,10 +61,34 @@ textarea {
 }
 
 .form-login {
-    max-width: 360px;
+    min-width: 250px;
+    max-width: 600px;
     padding: 15px;
     margin: auto;
+    margin-top:-30px;
 }
+
+.fundo-cinza {
+    background-color: #3d3d3d !important;
+}
+
+.Absolute-Center {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+    .Absolute-Center.is-Responsive {
+        width: 50%;
+        height: 50%;
+        min-width: 320px;
+        max-width: 500px;
+        padding: 40px;
+        
+    }
 
 h2 {
     color: #e26963;
@@ -99,26 +114,46 @@ h2 {
     color: #888888 !important;
 }
 
-.footer {
-    border-top:1px solid #f9f9f9;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 30px;
-    background-color: #fff;
-    text-align:center;
-    vertical-align:middle;
-    color:#bababa;
-    
-}
-.footer p{margin:0px !important; }
-
-.miolo {
-    padding: 5px 5px 5px 5px;
-}
 
 hr {
     border: 1px solid #ffeeee;
     margin: 5px;
 }
+
+.fundo-login {
+    background-color: #969696;
+}
+
+
+
+
+
+ /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+        text-align:center;
+      }
+      #footer {
+        color:#888888;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+

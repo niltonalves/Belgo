@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="apple-touch-icon" sizes="57x57" href="~/Content/images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Content/images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Content/images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Content/images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Content/images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Content/images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/Content/images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Content/images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/images/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/images/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/Content/images/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Content/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="~/Scripts/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/Content/images/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Belgo</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scritps/Bootstrap")
+
+</head>
+<body>
+
+    <div class="container">
+        @using (Html.BeginForm("Index", null, FormMethod.Post, new { @class = "form-login" }))
+        {
+            <div>
+                <a class="navbar-brand" href="#"><img src="@Url.Content("~/Content/Images")/logo_topo.png" class="img-responsive"></a>
+                <br />
+                <p class="red"><strong>Tela de Acesso</strong></p>
+                <label for="email" class="sr-only">E-mail</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="E-mail de acesso" required autofocus>
+                <br />
+                <label for="senha" class="sr-only">Senha</label>
+                <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha de acesso" required>
+                <br />
+                <button class="btn btn-lg btn-danger btn-block" type="submit">Entrar</button>
+            </div>
+        }
+    </div> <!-- /container -->
+</body>
+</html>

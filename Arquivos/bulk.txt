@@ -1,0 +1,104 @@
+
+=============================PESQUISA================================
+GET
+LISTA
+http://localhost:2138/api/pesquisa/
+
+GET
+CONSULTA
+http://localhost:2138/api/pesquisa/2
+
+POST
+CADASTRO
+http://localhost:2138/api/pesquisa
+{NOM_PESQUISA : "TESTE DA PESQUISA NOVO",
+    COD_USER_CRIACAO : "1"
+}
+
+POST
+ATUALIZAÇÃO
+http://localhost:2138/api/pesquisa/2
+{NOM_PESQUISA : "TESTE DA PESQUISA ALTERACAO",
+    COD_PESQUISA : "2"
+}
+
+
+=============================PARTICIPACAO================================
+GET
+LISTA
+http://localhost:2138/api/participacao/
+
+POST
+PARTICIPACAO
+http://localhost:2138/api/participacao/
+{
+ COD_PERGUNTA : 7,
+ COD_RESPOSTA : 1,
+ DSC_RESPOSTA_DISSERTATIVA : "Teste de participacao",
+ IND_RESPOSTA_NULA : "N"
+ 
+}
+
+=============================RESPOSTA================================
+GET
+LISTA
+http://localhost:2138/api/resposta
+
+
+GET
+CONSULTA
+http://localhost:2138/api/resposta/1
+
+POST
+CADASTRO
+http://localhost:2138/api/resposta
+{
+ COD_PERGUNTA : 7,
+ DSC_RESPOSTA : "Teste de resposta",
+ COD_USER_CRIACAO : "1"
+ 
+}
+
+
+POST
+ATUALIZAÇÃO
+http://localhost:2138/api/resposta/7
+{
+COD_RESPOSTA : 3,
+ DSC_RESPOSTA : "Teste de resposta ALTERACAO",
+}
+
+
+=============================PERGUNTA================================
+GET
+LISTA
+http://localhost:2138/api/pergunta
+
+GET
+CONSULTA
+http://localhost:2138/api/pergunta/7
+
+POST
+CADASTRO
+http://localhost:2138/api/pergunta
+{
+ COD_PESQUISA : "7"
+ ,DSC_PERGUNTA : "Teste de cadastro"
+ ,IND_TPO_PERGUNTA : "U"
+  ,NUM_ORDEM_PERGUNTA : "1"
+  ,COD_USER_CRIACAO : 1
+
+}
+
+POST
+ATUALIZAÇÃO
+http://localhost:2138/api/pergunta/9
+{
+ COD_PERGUNTA : 9
+ ,DSC_PERGUNTA : "Teste de cadastro alteração"
+ ,IND_TPO_PERGUNTA : "U"
+  ,NUM_ORDEM_PERGUNTA : "1"
+  ,COD_USER_CRIACAO : 1
+
+}
+
