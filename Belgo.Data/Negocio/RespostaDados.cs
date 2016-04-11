@@ -1,8 +1,11 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
+using Belgo.Dados.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 
 namespace Belgo.Data.Negocio
 {
@@ -17,14 +20,12 @@ namespace Belgo.Data.Negocio
         /// Lista as respostas cadastradas
         /// </summary>
         /// <returns>Lista de respostas</returns>
-        public List<CAD_RESPOSTA> Listar()
+        public List<Resposta> Listar()
         {
             try
             {
-                var retorno = db.CAD_RESPOSTA.
-                    Include("CAD_PERGUNTA").
-                    Include("CAD_PERGUNTA.CAD_PESQUISA").
-                    OrderBy(p => p.DTA_CRIACAO).ToList();
+                var retorno = db.CAD_RESPOSTA.AsEnumerable().Select(r => (Comum.TrataResposta(r))).
+                    OrderBy(p => p.DataCriacao).ToList();
 
                 return retorno;
             }
@@ -40,14 +41,12 @@ namespace Belgo.Data.Negocio
         /// </summary>
         /// <param name="id">ID da pesquisa</param>
         /// <returns>Objeto Pesquisa</returns>
-        public CAD_RESPOSTA Consultar(long id)
+        public Resposta Consultar(long id)
         {
             try
             {
-                var retorno = db.CAD_RESPOSTA.
-                    Include("CAD_PERGUNTA").
-                    Include("CAD_PERGUNTA.CAD_PESQUISA").
-                    FirstOrDefault(p => p.COD_RESPOSTA == id);
+                var retorno = db.CAD_RESPOSTA.AsEnumerable().
+                    Select(r => (Comum.TrataResposta(r))).FirstOrDefault(r => r.ID == id);
                 return retorno;
             }
             catch (Exception ex)
@@ -57,20 +56,13 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        /// <summary>
-        /// Cadastra a pesquisa
-        /// </summary>
-        /// <param name="pesquisa">Objeto de pesquisa</param>
-        /// <returns>ID da pesquisa cadastrada</returns>
-        public long Cadastrar(CAD_RESPOSTA resposta)
+
+        public CAD_RESPOSTA ConsultarResposta(long id)
         {
             try
             {
-                resposta.DTA_CRIACAO = DateTime.Now;
-                db.CAD_RESPOSTA.Add(resposta);
-                var retorno = db.SaveChanges();
-
-                return resposta.COD_PERGUNTA;
+                var retorno = db.CAD_RESPOSTA.FirstOrDefault(r => r.COD_RESPOSTA == id);
+                return retorno;
             }
             catch (Exception ex)
             {
@@ -79,15 +71,45 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        public void Atualizar(CAD_RESPOSTA resposta)
+
+        /// <summary>
+        /// Cadastra a pesquisa
+        /// </summary>
+        /// <param name="pesquisa">Objeto de pesquisa</param>
+        /// <returns>ID da pesquisa cadastrada</returns>
+        public long Cadastrar(Resposta resposta)
         {
             try
             {
-                var _uResposta = this.Consultar(resposta.COD_RESPOSTA);
+                var cadastro = new CAD_RESPOSTA()
+                {
+                    COD_RESPOSTA = resposta.ID,
+                    COD_PERGUNTA = resposta.IdPergunta,
+                    DSC_RESPOSTA = resposta.Descricao,
+                    DTA_CRIACAO = resposta.DataCriacao,
+                    COD_USER_CRIACAO = resposta.UsuarioCriacao.ID
+                };
 
-                _uResposta.DSC_RESPOSTA = resposta.DSC_RESPOSTA;
-                
-                db.Entry(_uResposta).State = System.Data.Entity.EntityState.Modified;
+                db.CAD_RESPOSTA.Add(cadastro);
+                var retorno = db.SaveChanges();
+
+                return cadastro.COD_PERGUNTA;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        public void Atualizar(Resposta resposta)
+        {
+            try
+            {
+                var cadastro = this.ConsultarResposta(resposta.ID);
+                cadastro.DSC_RESPOSTA = resposta.Descricao;
+
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -101,8 +123,9 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var resposta = this.Consultar(id);
-                db.CAD_RESPOSTA.Remove(resposta);
+                var cadastro = new CAD_RESPOSTA() { COD_RESPOSTA = id };
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
             }
             catch (Exception ex)
             {

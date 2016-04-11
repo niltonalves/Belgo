@@ -1,4 +1,6 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
+using Belgo.Dados.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +19,30 @@ namespace Belgo.Data.Negocio
         /// Lista as pesquisas cadastradas
         /// </summary>
         /// <returns>Lista de pesquisas</returns>
-        public List<CAD_PESQUISA> Listar()
+        public List<Pesquisa> Listar(bool? fechado)
         {
             try
             {
-                var retorno = db.CAD_PESQUISA.
-                    Include("CAD_PERGUNTA").
-                    Include("CAD_PERGUNTA.CAD_RESPOSTA").
-                    OrderBy(p => p.DTA_CRIACAO).ToList();
+
+                var retorno = (from p in db.CAD_PESQUISA
+                              .Include("CAD_PERGUNTA")
+                               .Include("CAD_PERGUNTA.CAD_RESPOSTA")
+                               select p).AsEnumerable()
+                              .Select(a => new Pesquisa
+                              {
+                                  ID = a.COD_PESQUISA,
+                                  Nome = a.NOM_PESQUISA,
+                                  Fechado = a.IND_FECHADO ?? false,
+                                  DataCriacao = a.DTA_CRIACAO,
+                                  Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                                  {
+                                      Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
+
+                                  }).ToList()
+                              }).OrderBy(p => p.DataCriacao).ToList();
+
+                if (fechado != null)
+                    retorno = retorno.Where(c => c.Fechado == fechado).ToList();
 
                 return retorno;
             }
@@ -40,15 +58,28 @@ namespace Belgo.Data.Negocio
         /// </summary>
         /// <param name="id">ID da pesquisa</param>
         /// <returns>Objeto Pesquisa</returns>
-        public CAD_PESQUISA Consultar(long id)
+        public Pesquisa Consultar(long id)
         {
             try
             {
-                var retorno = db.CAD_PESQUISA.
-                    Include("CAD_PERGUNTA").
-                    Include("CAD_PERGUNTA.CAD_RESPOSTA").
-                    FirstOrDefault(p => p.COD_PESQUISA == id);
+                var retorno = (from p in db.CAD_PESQUISA
+                              .Include("CAD_PERGUNTA")
+                               .Include("CAD_PERGUNTA.CAD_RESPOSTA")
+                               select p).AsEnumerable()
+                              .Select(a => new Pesquisa
+                              {
+                                  ID = a.COD_PESQUISA,
+                                  Nome = a.NOM_PESQUISA,
+                                  Fechado = a.IND_FECHADO ?? false,
+                                  DataCriacao = a.DTA_CRIACAO,
+                                  Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                                  {
+                                      Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
+
+                                  }).ToList()
+                              }).FirstOrDefault(c => c.ID == id);
                 return retorno;
+
             }
             catch (Exception ex)
             {
@@ -57,21 +88,41 @@ namespace Belgo.Data.Negocio
             }
 
         }
+        private CAD_PESQUISA ConsultarPesquisa(long id)
+        {
+            try
+            {
+                var retorno = db.CAD_PESQUISA.SingleOrDefault(c => c.COD_PESQUISA == id);
+                return retorno;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
         /// <summary>
         /// Cadastra a pesquisa
         /// </summary>
         /// <param name="pesquisa">Objeto de pesquisa</param>
         /// <returns>ID da pesquisa cadastrada</returns>
-        public long Cadastrar(CAD_PESQUISA pesquisa)
+        public long Cadastrar(Pesquisa pesquisa)
         {
             try
             {
-                pesquisa.DTA_CRIACAO = DateTime.Now;
-                pesquisa.IND_FECHADO = Convert.ToBoolean(pesquisa.IND_FECHADO);
-                db.CAD_PESQUISA.Add(pesquisa);
-                var retorno = db.SaveChanges();
+                var cadastro = new CAD_PESQUISA()
+                {
+                    NOM_PESQUISA = pesquisa.Nome,
+                    DTA_CRIACAO = DateTime.Now,
+                    COD_USER_CRIACAO = pesquisa.IdUsuarioCriacao,
+                    IND_FECHADO = Convert.ToBoolean(pesquisa.Fechado)
+                };
 
-                return pesquisa.COD_PESQUISA;
+                db.CAD_PESQUISA.Add(cadastro);
+                db.SaveChanges();
+                return cadastro.COD_PESQUISA;
             }
             catch (Exception ex)
             {
@@ -80,17 +131,16 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        public void Atualizar(CAD_PESQUISA pesquisa)
+        public void Atualizar(Pesquisa pesquisa)
         {
             try
             {
-                var _uPesquisa = this.Consultar(pesquisa.COD_PESQUISA);
+                var cadastro = this.ConsultarPesquisa(pesquisa.ID);
+                cadastro.NOM_PESQUISA = pesquisa.Nome;
 
-                _uPesquisa.NOM_PESQUISA = pesquisa.NOM_PESQUISA;
-                _uPesquisa.IND_FECHADO = Convert.ToBoolean(pesquisa.IND_FECHADO);
-
-                db.Entry(_uPesquisa).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
             }
             catch (Exception ex)
             {
@@ -103,8 +153,10 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var pesquisa = this.Consultar(id);
-                db.CAD_PESQUISA.Remove(pesquisa);
+                var pesquisa = new CAD_PESQUISA() { COD_PESQUISA = id };
+                db.Entry(pesquisa).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+
             }
             catch (Exception ex)
             {
@@ -117,10 +169,10 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var pesquisa = this.Consultar(id);
-                pesquisa.IND_FECHADO = true;
+                var cadastro = this.ConsultarPesquisa(id);
+                cadastro.IND_FECHADO = true;
 
-                db.Entry(pesquisa);
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             catch (Exception)
@@ -129,6 +181,7 @@ namespace Belgo.Data.Negocio
                 throw;
             }
         }
+
 
 
         #region implementação de dispose

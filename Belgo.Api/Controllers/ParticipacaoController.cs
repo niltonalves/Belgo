@@ -1,4 +1,5 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
 using Belgo.Data.Negocio;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Belgo.Api.Controllers
 
         [HttpGet]
         [Route("api/participacao")]
-        public List<CAD_PARTICIPACAO> GetAll()
+        public List<Participacao> GetAll()
         {
             var retorno = db.Listar();
 
@@ -33,7 +34,7 @@ namespace Belgo.Api.Controllers
 
         [HttpPost]
         [Route("api/participacao/{id}")]
-        public IHttpActionResult Put(int id, [FromBody]CAD_PARTICIPACAO participacao)
+        public IHttpActionResult Put(int id, [FromBody]Participacao participacao)
         {
             if (ModelState.IsValid)
             {
@@ -47,7 +48,7 @@ namespace Belgo.Api.Controllers
 
         [HttpPost]
         [Route("api/participacao/")]
-        public IHttpActionResult Post([FromBody]CAD_PARTICIPACAO participacao)
+        public IHttpActionResult Post([FromBody]Participacao participacao)
         {
             if (participacao == null)
                 return Content(HttpStatusCode.BadRequest, "Erro de entrada");
@@ -63,7 +64,6 @@ namespace Belgo.Api.Controllers
             db.Deletar(id);
             return Ok(HttpStatusCode.NoContent);
         }
-
        
     }
 }

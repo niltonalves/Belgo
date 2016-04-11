@@ -1,4 +1,5 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
 using Belgo.Data.Negocio;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Belgo.Api.Controllers
 
         [HttpGet]
         [Route("api/resposta")]
-        public List<CAD_RESPOSTA> GetAll()
+        public List<Resposta> GetAll()
         {
             var retorno = db.Listar();
 
@@ -33,7 +34,7 @@ namespace Belgo.Api.Controllers
 
         [HttpPost]
         [Route("api/resposta/{id}")]
-        public IHttpActionResult Put(int id, [FromBody]CAD_RESPOSTA resposta)
+        public IHttpActionResult Put(int id, [FromBody]Resposta resposta)
         {
             if (ModelState.IsValid)
             {
@@ -47,7 +48,7 @@ namespace Belgo.Api.Controllers
 
         [HttpPost]
         [Route("api/resposta/")]
-        public IHttpActionResult Post([FromBody]CAD_RESPOSTA resposta)
+        public IHttpActionResult Post([FromBody]Resposta resposta)
         {
             if (resposta == null)
                 return Content(HttpStatusCode.BadRequest, "Erro de entrada");

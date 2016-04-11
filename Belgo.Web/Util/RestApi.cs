@@ -13,6 +13,9 @@ namespace Belgo.Web.Util
         string urlApi = ConfigurationManager.AppSettings["urlApi"].ToString();
         List<Parameter> parametros = new List<Parameter>();
 
+        public Method Method { get; set; }
+        public Resources Resource { get; set; }
+
         /// <summary>
         /// Executa a chamada a api
         /// </summary>
@@ -20,20 +23,31 @@ namespace Belgo.Web.Util
         /// <param name="resource">Tipo do resource</param>
         /// <param name="method">Método de uso</param>
         /// <returns>Objeto deserializado da pi</returns>
-        public IRestResponse Executar<T>(Resource resource, Method method) where T : new()
+        public IRestResponse<T> Executar<T>() where T : new()
         {
             try
             {
-                var cliente = new RestClient(urlApi);
-                var request = new RestRequest();
-                request.Resource = resource.ToString();
-                request.Method = method;
-                request.RequestFormat = DataFormat.Json;
-                request.Parameters.Clear();
-                parametros.ForEach(delegate (Parameter param) {
 
-                    request.Parameters.Add(param);
+                RestRequest request;
+                var cliente = new RestClient(urlApi);
+                var segment = parametros.FirstOrDefault(s => s.Type == ParameterType.UrlSegment);
+
+                if (segment == null)
+                    request = new RestRequest(Resource.ToString());
+                else
+                    request = new RestRequest(string.Format("{0}/{1}", Resource.ToString(), segment.Value));
+                 
+                request.Method = this.Method;
+                //request.RequestFormat = DataFormat.Json;
+                request.AddHeader("Content-type", "application/json");
+                request.Parameters.Clear();
+                parametros.Where(p => p.Type != ParameterType.UrlSegment).ToList()
+                    .ForEach(p =>
+                {
+                    request.AddParameter(p.Name, p.Value);
+
                 });
+
                 var response = cliente.Execute<T>(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     throw new Exception(response.StatusDescription);
@@ -59,7 +73,7 @@ namespace Belgo.Web.Util
         /// <summary>
         /// Resource disponíveis
         /// </summary>
-        public enum Resource
+        public enum Resources
         {
             Pesquisa = 1,
             Pergunta,

@@ -1,4 +1,5 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
 using Belgo.Data.Negocio;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,22 @@ namespace Belgo.Api.Controllers
 
         [HttpGet]
         [Route("api/pesquisa")]
-        public List<CAD_PESQUISA> GetAll()
+        public List<Pesquisa> GetAll()
         {
-            var retorno = db.Listar();
+            var retorno = db.Listar(null);
 
             return retorno;
         }
+
+        [HttpGet]
+        [Route("api/pesquisa/fechado/{fechado}")]
+        public List<Pesquisa> GetAllPublicados(string fechado)
+        {
+            var publicado = fechado.Equals("sim");
+            var retorno = db.Listar(publicado);
+            return retorno;
+        }
+
 
         [HttpGet]
         [Route("api/pesquisa/{id}")]
@@ -34,7 +45,7 @@ namespace Belgo.Api.Controllers
 
         [Route("api/pesquisa/{id}")]
         [HttpPost]
-        public IHttpActionResult Put(int id, [FromBody]CAD_PESQUISA pesquisa)
+        public IHttpActionResult Put(int id, [FromBody]Pesquisa pesquisa)
         {
             if (ModelState.IsValid)
             {
@@ -43,12 +54,11 @@ namespace Belgo.Api.Controllers
             }
 
             return Content(HttpStatusCode.BadRequest, "Erro de entrada");
-
         }
 
         [HttpPost]
         [Route("api/pesquisa/")]
-        public IHttpActionResult Post([FromBody]CAD_PESQUISA pesquisa)
+        public IHttpActionResult Post([FromBody]Pesquisa pesquisa)
         {
             if (pesquisa == null)
                 return Content(HttpStatusCode.BadRequest, "Erro de entrada");

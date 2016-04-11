@@ -1,5 +1,4 @@
-﻿using Belgo.Dados.Entidade;
-using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Modelo;
 using Belgo.Data.Negocio;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +7,13 @@ using System.Web.Http;
 
 namespace Belgo.Api.Controllers
 {
-    public class PerguntaController : ApiController
+    public class PesquisaController : ApiController
     {
-        PerguntaDados db = new PerguntaDados();
+        PesquisaDados db = new PesquisaDados();
 
         [HttpGet]
-        [Route("api/pergunta")]
-        public List<Pergunta> GetAll()
+        [Route("api/pesquisa")]
+        public List<CAD_PESQUISA> GetAll()
         {
             var retorno = db.Listar();
 
@@ -22,7 +21,7 @@ namespace Belgo.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/pergunta/{id}")]
+        [Route("api/pesquisa/{id}")]
         public IHttpActionResult Get(int id)
         {
             var retorno = db.Consultar(id);
@@ -32,13 +31,14 @@ namespace Belgo.Api.Controllers
             return Ok(retorno);
         }
 
+
+        [Route("api/pesquisa/{id}")]
         [HttpPost]
-        [Route("api/pergunta/{id}")]
-        public IHttpActionResult Put(int id, [FromBody]Pergunta pergunta)
+        public IHttpActionResult Put(int id, [FromBody]CAD_PESQUISA pesquisa)
         {
             if (ModelState.IsValid)
             {
-                this.db.Atualizar(pergunta);
+                this.db.Atualizar(pesquisa);
                 return Ok(HttpStatusCode.NoContent);
             }
 
@@ -47,20 +47,21 @@ namespace Belgo.Api.Controllers
         }
 
         [HttpPost]
-        [Route("api/pergunta/")]
-        public IHttpActionResult Post([FromBody]Pergunta pergunta)
+        [Route("api/pesquisa/")]
+        public IHttpActionResult Post([FromBody]CAD_PESQUISA pesquisa)
         {
-            if (pergunta == null)
+            if (pesquisa == null)
                 return Content(HttpStatusCode.BadRequest, "Erro de entrada");
-
-            var retorno = this.db.Cadastrar(pergunta);
+                    
+            var retorno = this.db.Cadastrar(pesquisa);
             return Ok(retorno);
         }
+
         [HttpPost]
-        [Route("api/pergunta/{id}")]
+        [Route("api/pesquisa/")]
         public IHttpActionResult Delete(int id)
         {
-            db.Deletar(id);
+
             return Ok(HttpStatusCode.NoContent);
         }
 

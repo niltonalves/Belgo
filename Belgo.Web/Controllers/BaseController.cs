@@ -1,8 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using RestSharp;
 using System.Web.Mvc;
+using System.Configuration;
 
 namespace Belgo.Web.Controllers
 {
@@ -19,5 +22,13 @@ namespace Belgo.Web.Controllers
             Erro,
             Aviso
         }
+
+        public void ExecutarApi()
+        {
+            string urlApi = ConfigurationManager.AppSettings["UrlApi"].ToString();
+            var client = new RestClient(urlApi);
+
+        }
+
     }
 }

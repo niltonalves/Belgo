@@ -1,4 +1,5 @@
-﻿using Belgo.Dados.Modelo;
+﻿using Belgo.Dados.Entidade;
+using Belgo.Dados.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,19 @@ namespace Belgo.Data.Negocio
         /// Lista as respostas cadastradas
         /// </summary>
         /// <returns>Lista de respostas</returns>
-        public List<CAD_PARTICIPACAO> Listar()
+        public List<Participacao> Listar()
         {
             try
             {
-                var retorno = db.CAD_PARTICIPACAO.
-                    Include("CAD_RESPOSTA").
-                    Include("CAD_RESPOSTA.CAD_PERGUNTA").
-                    OrderBy(p => p.DTA_PARTICIPACAO).ToList();
+                var retorno = db.CAD_PARTICIPACAO
+                    .Select(c => new Participacao()
+                    {
+                        ID = c.COD_PARTICIPACAO,
+                        DataParticipacao = c.DTA_PARTICIPACAO,
+                        DataSincronizacao = c.DTA_SINCRONIZACAO,
+                        Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
+                        RespostaNula = c.IND_RESPOSTA_NULA,
+                    }).ToList();
 
                 return retorno;
             }
@@ -40,14 +46,21 @@ namespace Belgo.Data.Negocio
         /// </summary>
         /// <param name="id">ID da pesquisa</param>
         /// <returns>Objeto Pesquisa</returns>
-        public CAD_PARTICIPACAO Consultar(long id)
+        public Participacao Consultar(long id)
         {
             try
             {
-                var retorno = db.CAD_PARTICIPACAO.
-                    Include("CAD_RESPOSTA").
-                    Include("CAD_RESPOSTA.CAD_PERGUNTA").
-                    FirstOrDefault(p => p.COD_RESPOSTA == id);
+
+                var retorno = db.CAD_PARTICIPACAO.Where(c => c.COD_PARTICIPACAO == id)
+                    .Select(c => new Participacao()
+                    {
+                        ID = c.COD_PARTICIPACAO,
+                        DataParticipacao = c.DTA_PARTICIPACAO,
+                        DataSincronizacao = c.DTA_SINCRONIZACAO,
+                        Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
+                        RespostaNula = c.IND_RESPOSTA_NULA,
+                    }).FirstOrDefault();
+
                 return retorno;
             }
             catch (Exception ex)
@@ -62,16 +75,25 @@ namespace Belgo.Data.Negocio
         /// </summary>
         /// <param name="pesquisa">Objeto de pesquisa</param>
         /// <returns>ID da pesquisa cadastrada</returns>
-        public long Cadastrar(CAD_PARTICIPACAO participacao)
+        public long Cadastrar(Participacao participacao)
         {
             try
             {
-                participacao.DTA_PARTICIPACAO = (participacao.DTA_PARTICIPACAO == null ?  DateTime.Now : participacao.DTA_PARTICIPACAO);
-                participacao.DTA_SINCRONIZACAO = DateTime.Now;
-                db.CAD_PARTICIPACAO.Add(participacao);
+
+                var cadastro = new CAD_PARTICIPACAO()
+                {
+                    COD_RESPOSTA = participacao.IdResposta,
+                    COD_PERGUNTA = participacao.IdPergunta,
+                    DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
+                    IND_RESPOSTA_NULA = participacao.RespostaNula,
+                    DTA_PARTICIPACAO = participacao.DataParticipacao,
+                    DTA_SINCRONIZACAO = participacao.DataSincronizacao,
+                };
+                
+                db.CAD_PARTICIPACAO.Add(cadastro);
                 var retorno = db.SaveChanges();
 
-                return participacao.COD_PARTICIPACAO;
+                return cadastro.COD_PARTICIPACAO;
             }
             catch (Exception ex)
             {
@@ -80,16 +102,21 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        public void Atualizar(CAD_PARTICIPACAO participacao)
+        public void Atualizar(Participacao participacao)
         {
             try
             {
-                var _uParticipacao = this.Consultar(participacao.COD_PARTICIPACAO);
+                var cadastro = new CAD_PARTICIPACAO()
+                {
+                    COD_RESPOSTA = participacao.IdResposta,
+                    COD_PERGUNTA = participacao.IdPergunta,
+                    DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
+                    IND_RESPOSTA_NULA = participacao.RespostaNula,
+                    DTA_PARTICIPACAO = participacao.DataParticipacao,
+                    DTA_SINCRONIZACAO = participacao.DataSincronizacao,
+                };
 
-                _uParticipacao.DSC_RESPOSTA_DISSERTATIVA = participacao.DSC_RESPOSTA_DISSERTATIVA;
-                _uParticipacao.IND_RESPOSTA_NULA = participacao.IND_RESPOSTA_NULA;
-
-                db.Entry(_uParticipacao).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -103,8 +130,10 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var participacao = this.Consultar(id);
-                db.CAD_PARTICIPACAO.Remove(participacao);
+                var cadastro = new CAD_PARTICIPACAO() { COD_PARTICIPACAO = id };
+                db.Entry(cadastro).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+
             }
             catch (Exception ex)
             {
