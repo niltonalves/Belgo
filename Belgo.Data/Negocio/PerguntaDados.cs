@@ -23,7 +23,19 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var retorno = db.CAD_PERGUNTA.AsEnumerable().Select(p => Comum.TrataPergunta(p)).OrderBy(p => p.DataCriacao).ToList();
+                var retorno = (from p in db.CAD_PERGUNTA
+                               .Include("CAD_RESPOSTA")
+                               select p).AsEnumerable()
+                              .Select(a => new Pergunta
+                              {
+                                  ID = a.COD_PERGUNTA,
+                                  Descricao = a.DSC_PERGUNTA,
+                                  DataCriacao = a.DTA_CRIACAO,
+                                  Tipo = a.IND_TPO_PERGUNTA,
+                                  Ordem = Convert.ToInt16(a.NUM_ORDEM_PERGUNTA),
+                                  IdPesquisa = a.COD_PERGUNTA,
+                                  Respostas = a.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
+                              }).OrderBy(p => p.DataCriacao).ToList();
 
                 return retorno;
             }
@@ -43,7 +55,19 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var retorno = db.CAD_PERGUNTA.AsEnumerable().Select(p => Comum.TrataPergunta(p)).FirstOrDefault(p => p.ID == id);
+                var retorno = (from p in db.CAD_PERGUNTA
+                               .Include("CAD_RESPOSTA")
+                               select p).AsEnumerable().Select(a => new Pergunta
+                               {
+                                   ID = a.COD_PERGUNTA,
+                                   Descricao = a.DSC_PERGUNTA,
+                                   DataCriacao = a.DTA_CRIACAO,
+                                   Tipo = a.IND_TPO_PERGUNTA,
+                                   Ordem = Convert.ToInt16(a.NUM_ORDEM_PERGUNTA),
+                                   IdPesquisa = a.COD_PERGUNTA,
+                                   Respostas = a.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
+                               }).FirstOrDefault(a => a.ID == id);
+
                 return retorno;
             }
             catch (Exception ex)
@@ -84,7 +108,7 @@ namespace Belgo.Data.Negocio
                 {
                     COD_PESQUISA = pergunta.IdPesquisa,
                     DSC_PERGUNTA = pergunta.Descricao,
-                    DTA_CRIACAO = pergunta.DataCriacao,
+                    DTA_CRIACAO = DateTime.Now,
                     NUM_ORDEM_PERGUNTA = ordem,
                     IND_TPO_PERGUNTA = pergunta.Tipo,
                     COD_USER_CRIACAO = pergunta.IdUsuario
@@ -107,6 +131,7 @@ namespace Belgo.Data.Negocio
             try
             {
                 var cadastro = this.ConsultarPergunta(pergunta.ID);
+
                 cadastro.DSC_PERGUNTA = pergunta.Descricao;
                 cadastro.NUM_ORDEM_PERGUNTA = pergunta.Ordem;
 

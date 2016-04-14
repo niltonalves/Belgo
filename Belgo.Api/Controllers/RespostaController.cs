@@ -57,13 +57,13 @@ namespace Belgo.Api.Controllers
             return Ok(retorno);
         }
 
-        //[HttpPost]
-        //[Route("api/resposta/{id}")]
-        //public IHttpActionResult Delete(int id)
-        //{
-        //    db.Deletar(id);
-        //    return Ok(HttpStatusCode.NoContent);
-        //}
+        [HttpDelete]
+        [Route("api/resposta/{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            this.db.Deletar(id);
+            return Ok(HttpStatusCode.NoContent);
+        }
 
     }
 }

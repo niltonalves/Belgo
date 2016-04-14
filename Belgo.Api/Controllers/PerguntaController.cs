@@ -56,7 +56,7 @@ namespace Belgo.Api.Controllers
             var retorno = this.db.Cadastrar(pergunta);
             return Ok(retorno);
         }
-        [HttpPost]
+        [HttpDelete]
         [Route("api/pergunta/{id}")]
         public IHttpActionResult Delete(int id)
         {

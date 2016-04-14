@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Util\Comum.cs" />
+    <Compile Include="Util\Enumerador.cs" />
     <Compile Include="Util\RestApi.cs" />
     <Content Include="App_Code\RestApi.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -300,9 +301,13 @@
     <Content Include="Views\Usuario\Cadastrar.cshtml" />
     <Content Include="Views\Shared\_Alertas.cshtml" />
     <Content Include="Views\Pesquisa\CadastrarPergunta.cshtml" />
+    <Content Include="Views\Pesquisa\_CadastrarResposta.cshtml" />
+    <Content Include="Views\Pesquisa\_ExcluirResposta.cshtml" />
+    <Content Include="Views\Pesquisa\_Visualizar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="bin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

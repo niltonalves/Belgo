@@ -25,6 +25,10 @@ namespace Belgo.Web.Models
 
         public class PerguntaModel
         {
+            public PerguntaModel()
+            {
+                this.Respostas = new List<RespostaModel>();
+            }
             public Int64 ID { get; set; }
             public Int64 IdPesquisa { get; set; }
             public Int64? IdUsuario { get; set; }
@@ -33,14 +37,14 @@ namespace Belgo.Web.Models
             public short Ordem { get; set; }
             public DateTime? DataCriacao { get; set; }
             public Usuario UsuarioCriacao { get; set; }
-            //public List<Resposta> Respostas { get; set; }
+            public List<RespostaModel> Respostas { get; set; }
         }
 
         public class RespostaModel
         {
-
             public long ID { get; set; }
             public long IdPergunta { get; set; }
+            public long IdPesquisa { get; set; }
             public string Descricao { get; set; }
             public DateTime? DataCriacao { get; set; }
             public Usuario UsuarioCriacao { get; set; }

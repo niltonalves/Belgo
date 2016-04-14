@@ -1,0 +1,27 @@
+﻿@model Belgo.Web.Models.PesquisaModel.RespostaModel
+<!--modal cadastrar resposta-->
+
+@using (Html.BeginForm("CadastrarResposta", null, FormMethod.Post))
+{
+
+    @Html.HiddenFor(m => Model.ID)
+
+    @Html.HiddenFor(m => Model.IdPergunta)
+    @Html.HiddenFor(m => Model.IdPesquisa, new {@value = Request["idPesquisa"] })
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Cadastrar resposta</h4>
+    </div>
+    <div class="modal-body">
+        <div class="input-group">
+            <span class="input-group-addon">Resposta</span>
+            @Html.TextBoxFor(m => Model.Descricao, new { @class = "form-control input-normal", placeholder = "Digite a descrição da resposta", required = "required" })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void()" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+        <button type="submit" role="button" class="btn btn-danger">Cadastrar</button>
+    </div>
+
+}

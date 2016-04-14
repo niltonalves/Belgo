@@ -27,7 +27,6 @@ namespace Belgo.Web.Util
         {
             try
             {
-
                 RestRequest request;
                 var cliente = new RestClient(urlApi);
                 var segment = parametros.FirstOrDefault(s => s.Type == ParameterType.UrlSegment);
@@ -49,8 +48,8 @@ namespace Belgo.Web.Util
                 });
 
                 var response = cliente.Execute<T>(request);
-                if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new Exception(response.StatusDescription);
+                //if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode== System.Net.HttpStatusCode.NotFound)
+                //    throw new Exception(response.StatusDescription);
 
                 return response;
             }

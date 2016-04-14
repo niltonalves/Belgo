@@ -15,6 +15,7 @@ namespace Belgo.Dados.Entidade
             this.Tipo = _pergunta.Tipo;
             this.Ordem = _pergunta.Ordem;
             this.DataCriacao = _pergunta.DataCriacao;
+            this.IdPesquisa = _pergunta.IdPesquisa;
         }
 
         public Int64 ID { get; set; }

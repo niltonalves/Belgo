@@ -83,11 +83,10 @@ namespace Belgo.Data.Negocio
             {
                 var cadastro = new CAD_RESPOSTA()
                 {
-                    COD_RESPOSTA = resposta.ID,
                     COD_PERGUNTA = resposta.IdPergunta,
                     DSC_RESPOSTA = resposta.Descricao,
-                    DTA_CRIACAO = resposta.DataCriacao,
-                    COD_USER_CRIACAO = resposta.UsuarioCriacao.ID
+                    DTA_CRIACAO = DateTime.Now,
+                    COD_USER_CRIACAO = resposta.IdUsuarioCriacao
                 };
 
                 db.CAD_RESPOSTA.Add(cadastro);

@@ -55,6 +55,7 @@ namespace Belgo.Dados.Util
                 DataCriacao = resposta.DTA_CRIACAO,
                 Descricao = resposta.DSC_RESPOSTA,
                 IdPergunta = resposta.COD_PERGUNTA,
+                IdPesquisa = resposta.CAD_PERGUNTA.COD_PESQUISA,
                 UsuarioCriacao = TrataUsuario(resposta.SCA_USUARIO)
             };
             return retorno;

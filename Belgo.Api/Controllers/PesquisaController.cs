@@ -42,9 +42,9 @@ namespace Belgo.Api.Controllers
             return Ok(retorno);
         }
 
-
-        [Route("api/pesquisa/{id}")]
+        
         [HttpPost]
+        [Route("api/pesquisa/{id}")]
         public IHttpActionResult Put(int id, [FromBody]Pesquisa pesquisa)
         {
             if (ModelState.IsValid)
@@ -67,10 +67,11 @@ namespace Belgo.Api.Controllers
             return Ok(retorno);
         }
 
-        [HttpPost]
-        [Route("api/pesquisa/")]
+        [HttpDelete]
+        [Route("api/pesquisa/{id}")]
         public IHttpActionResult Delete(int id)
         {
+            this.db.Deletar(id);
 
             return Ok(HttpStatusCode.NoContent);
         }
