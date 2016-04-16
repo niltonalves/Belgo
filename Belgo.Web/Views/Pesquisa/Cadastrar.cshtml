@@ -12,6 +12,7 @@
         <div class="form-medio">
             @if (Model.ID != 0)
             {
+                @Html.HiddenFor(m=> Model.ID)
                 <div class="pull-right">
                     <button type="button" class="btn btn-link" title="Visualizar pesquisa" data-tooltip="tooltip" data-toggle="modal" data-acao="Visualizar" data-id="@Model.ID" data-target="#modal-visualizar">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Visualizar
@@ -45,6 +46,8 @@
                                 <tr class="gray">
                                     <th>ID</th>
                                     <th>Título</th>
+                                    <th class="text-center">Tipo</th>
+                                    <th class="text-center">Total de Respostas</th>
                                     <th class="text-center">Data do Cadastro</th>
                                     <th class="text-center">Ação</th>
                                 </tr>
@@ -52,15 +55,19 @@
                             <tbody>
                                 @{foreach (var item in Model.Perguntas)
                                     {
-                                        <tr>
+                                        var totalRespostas = item.Respostas.Count();
+                                        var tipo = Belgo.Web.Util.Enumerador.GetDescription((Belgo.Web.Util.Enumerador.TipoPergunta)Enum.Parse(typeof(Belgo.Web.Util.Enumerador.TipoPergunta), item.Tipo));
+                                         <tr>
                                             <td>@item.ID</td>
                                             <td>@item.Descricao</td>
+                                            <td class="text-center">@tipo</td>
+                                            <td class="text-center">@totalRespostas</td>
                                             <td class="text-center">@item.DataCriacao</td>
                                             <td class="text-center">
-                                                <a href="@Url.Action("CadastrarPergunta", new { id = item.ID, idPesquisa = Model.ID })" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip" data-toggle="modal">
+                                                <a href="@Url.Action("CadastrarPergunta", new { id = item.ID, idPesquisa = Model.ID })" class="btn btn-default btn-xs editar red @(Model.Fechado ? "disabled" : "")" title="Editar" data-tooltip="tooltip" data-toggle="modal">
                                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                                 </a>
-                                                <button type="button" class="btn btn-default btn-xs editar red" title="Excluir" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-excluir">
+                                                <button type="button" class="btn btn-default btn-xs editar red @(totalRespostas>0 ? "disabled" : "") @(Model.Fechado ? "disabled" : "")" title="@(totalRespostas>0 ? "Não é possível excluir quando existe resposta cadastrada." : "Excluir")" data-tooltip="tooltip" data-toggle="modal" data-id="@item.ID" data-id-pesquisa="@Model.ID" data-acao="ExcluirPergunta" data-target="#modal-excluir">
                                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                                 </button>
                                             </td>
@@ -84,62 +91,15 @@
         </div>
                                     }
 </div>
-<!--modal troca exluir-->
+
 <div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Excluir pergunta</h4>
-            </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja excluir esta pergunta?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a href="@Url.Action("ExcluirPergunta", new {id = 0 })" role="button" class="btn btn-danger">Excluir</a>
-            </div>
+
         </div>
     </div>
 </div>
 
-<!--modal troca de senha-->
-<div class="modal fade" tabindex="-1" role="dialog" id="modal-cadastrar-pergunta">
-    @using (Html.BeginForm("CadastrarPergunta", null, FormMethod.Post))
-    {
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Cadastrar pergunta</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group">
-                        <span class="input-group-addon">Pergunta</span>
-                        <input type="text" class="form-control input-normal" placeholder="Título da pergunta" aria-describedby="basic-addon1" required autofocus>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">Resposta</span>
-                        <input type="text" class="form-control input-normal" placeholder="Descrição da resposta" aria-describedby="basic-addon1" required autofocus>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">Tipo da resposta</span>
-                        <select class="form-control">
-                            <option>Única escolha</option>
-                            <option>Múltipla escolha</option>
-                            <option>Dissertativa</option>
-                            <option>Outras</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="@Url.Action("Index")" role="link" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-                    <button type="submit" role="button" class="btn btn-danger">Cadastrar</button>
-                </div>
-            </div>
-        </div>
-    }
-</div>
 
 <!--modal preview-->
 <div class="modal fade" tabindex="-1" role="dialog" id="modal-visualizar">
@@ -157,15 +117,16 @@
     <script>
         $(function () {
 
-            $('#modal-visualizar').on('show.bs.modal', function (e) {
+            $('#modal-visualizar, #modal-excluir').on('show.bs.modal', function (e) {
                 var $modal = $(this);
                 var id = $(e.relatedTarget).attr("data-id");
+                var idPesquisa = $(e.relatedTarget).attr("data-id-pesquisa");
                 var acao = $(e.relatedTarget).attr("data-acao");
                 $.ajax({
                     cache: false,
                     type: 'GET',
                     url: "@Url.Content("~/Pesquisa/")" + acao,
-                    data: { "id": id},
+                    data: { "id": id , "idPesquisa" : idPesquisa},
                     success: function (data) {
                         $modal.find('.modal-content').html(data);
                     }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<div class="panel panel-default">
+<div class="panel panel-default " data-toggle="validator">
     <div class="panel-heading gray">Dados da pergunta</div>
 
     @using (Html.BeginForm("CadastrarPergunta", null, FormMethod.Post))
@@ -33,13 +33,11 @@
             </div>
 
             <div class="modal-footer">
-                <a href="@Url.Action("Index")" role="button" class="btn btn-default cancelar">Cancelar</a>
+                <a href="@Url.Action("Cadastrar", new {id = Model.IdPesquisa })" role="button" class="btn btn-default cancelar">Cancelar</a>
                 <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>
             </div>
 
-
-
-            @if (Model.ID != 0)
+            @if (Model.ID != 0 & Model.Tipo!="D")
             {
                 <hr />
 
@@ -123,7 +121,7 @@
             }
 
             $(".select-pergunta").on("change", function () {
-                window.location.href = "@Url.Content("~/Pesquisa/CadastrarPergunta/")" + this.value;
+                window.location.href = "@Url.Content("~/Pesquisa/CadastrarPergunta/")" + this.value + "?idPesquisa=" + @Model.IdPesquisa;
             });
 
             $('#modal-cadastrar-resposta, #modal-excluir').on('show.bs.modal', function (e) {

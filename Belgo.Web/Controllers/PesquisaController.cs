@@ -35,7 +35,15 @@ namespace Belgo.Web.Controllers
                 pesquisaModel.ID = pesquisa.Data.ID;
                 pesquisaModel.Nome = pesquisa.Data.Nome;
 
-                pesquisaModel.Perguntas = pesquisa.Data.Perguntas.Select(p => new PesquisaModel.PerguntaModel() { ID = p.ID, Descricao = p.Descricao, DataCriacao = p.DataCriacao, Ordem = p.Ordem }).ToList();
+                pesquisaModel.Perguntas = pesquisa.Data.Perguntas.Select(p => new PesquisaModel.PerguntaModel()
+                {
+                    ID = p.ID,
+                    Descricao = p.Descricao,
+                    DataCriacao = p.DataCriacao,
+                    Ordem = p.Ordem,
+                    Tipo = p.Tipo,
+                    Respostas = p.Respostas.Select(i => new RespostaModel() { ID = i.ID }).ToList()
+                }).ToList();
                 Session["Perguntas"] = pesquisaModel.Perguntas;
 
                 return View(pesquisaModel);
@@ -54,29 +62,44 @@ namespace Belgo.Web.Controllers
             api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "Nome", Value = model.Nome });
             api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "IdUsuarioCriacao", Value = usuario.ID });
 
+            this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa cadastrada com sucesso.");
+
             if (model.ID != 0)
             {
                 api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = model.ID });
                 api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "ID", Value = model.ID });
+                this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa alterada com sucesso.");
             }
+
             var retorno = api.Executar<long>();
 
-            this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa cadastrada com sucesso.");
             return RedirectToAction("Cadastrar", new { id = retorno.Data });
 
         }
-        public ActionResult Excluir(int id)
+        public ActionResult Excluir(int id, bool? efetuar)
         {
-            var api = new RestApi();
-            api.Method = Method.DELETE;
-            api.Resource = RestApi.Resources.Pesquisa;
-            api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
-            api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
-            var retorno = api.Executar<long>();
+            if (Convert.ToBoolean(efetuar))
+            {
+                var api = new RestApi();
+                api.Method = Method.DELETE;
+                api.Resource = RestApi.Resources.Pesquisa;
+                api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
+                api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
+                var retorno = api.Executar<long>();
 
-            this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa excluída com sucesso.");
-            return RedirectToAction("Index");
+                this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa excluída com sucesso.");
+                return RedirectToAction("Index");
+            }
+            else
+            {
 
+                var model = new PesquisaModel()
+                {
+                    ID = id
+                };
+                return PartialView("_ExcluirPesquisa", model);
+
+            }
         }
 
         public ActionResult CadastrarPergunta(long? id, long idPesquisa)
@@ -99,6 +122,7 @@ namespace Belgo.Web.Controllers
                     model.Ordem = _pergunta.Ordem;
                     model.DataCriacao = _pergunta.DataCriacao;
                     model.Tipo = _pergunta.Tipo;
+                    model.IdPesquisa = _pergunta.IdPesquisa;
                     if (_pergunta.Respostas != null)
                         model.Respostas = _pergunta.Respostas.Select(r => new RespostaModel() { ID = r.ID, Descricao = r.Descricao, DataCriacao = r.DataCriacao, IdPergunta = r.IdPergunta }).ToList();
 
@@ -139,23 +163,66 @@ namespace Belgo.Web.Controllers
                 this.MostrarAlerta(TipoAlerta.Sucesso, "Pergunta cadastrada com sucesso.");
             }
 
-            api.Executar<long>();
+            var cadastro = api.Executar<long>();
 
-            return RedirectToAction("CadastrarPergunta", new { id = model.ID, idPesquisa = model.IdPesquisa });
+            return RedirectToAction("CadastrarPergunta", new { id = cadastro.Data , idPesquisa =  model.IdPesquisa });
         }
 
 
         [HttpPost]
         public ActionResult Publicar(PesquisaModel model)
         {
-            this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa publicada com sucesso.");
+            try
+            {
+                var api = new RestApi();
+                var usuario = Comum.UsuarioLogado();
+                api.Method = Method.POST;
+                api.Resource = RestApi.Resources.Pesquisa;
+                api.Action = "publicar";
+                api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = model.ID });
+                api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "ID", Value = model.ID });
+
+                api.Executar<long>();
+
+                this.MostrarAlerta(TipoAlerta.Sucesso, "Pesquisa publicada com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
             return RedirectToAction("Index");
         }
 
-        public ActionResult ExcluirPergunta()
+        public ActionResult ExcluirPergunta(long id, long idPesquisa, bool? efetuar)
         {
             this.MostrarAlerta(TipoAlerta.Sucesso, "Pergunta excluída com sucesso.");
-            return RedirectToAction("Cadastrar", new { id = 1 });
+
+            if (Convert.ToBoolean(efetuar))
+            {
+                try
+                {
+                    var api = new RestApi();
+                    api.Method = Method.DELETE;
+                    api.Resource = RestApi.Resources.Pergunta;
+                    api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
+                    api.Executar<Resposta>();
+                    this.MostrarAlerta(TipoAlerta.Sucesso, "Pergunta excluída com sucesso.");
+                    return RedirectToAction("Cadastrar", new { id = idPesquisa });
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            var model = new PerguntaModel()
+            {
+                ID = id,
+                IdPesquisa = idPesquisa
+            };
+            return PartialView("_ExcluirPergunta", model);
+
         }
 
 
@@ -170,6 +237,7 @@ namespace Belgo.Web.Controllers
                     api.Resource = RestApi.Resources.Resposta;
                     api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
                     api.Executar<Resposta>();
+
                     this.MostrarAlerta(TipoAlerta.Sucesso, "Resposta excluída com sucesso.");
                     return RedirectToAction("CadastrarPergunta", new { id = idPergunta, idPesquisa = idPesquisa });
                 }
@@ -182,7 +250,8 @@ namespace Belgo.Web.Controllers
             var model = new RespostaModel()
             {
                 ID = id,
-                IdPergunta = idPergunta
+                IdPergunta = idPergunta,
+                IdPesquisa = idPesquisa
             };
             return PartialView("_ExcluirResposta", model);
         }
@@ -263,6 +332,7 @@ namespace Belgo.Web.Controllers
                 {
                     ID = retorno.Data.ID,
                     Nome = retorno.Data.Nome,
+                    Fechado = retorno.Data.Fechado,
                     Perguntas = retorno.Data.Perguntas.Select(p => new PerguntaModel()
                     {
                         Ordem = p.Ordem,
@@ -271,7 +341,7 @@ namespace Belgo.Web.Controllers
                         Respostas = p.Respostas.Select(r => new RespostaModel() { Descricao = r.Descricao }).ToList()
                     }
 
-                    ).OrderBy(p=>p.Ordem).ToList()
+                    ).OrderBy(p => p.Ordem).ToList()
                 };
                 return PartialView("_Visualizar", pesquisaModel);
             }
@@ -283,68 +353,37 @@ namespace Belgo.Web.Controllers
 
         }
 
-
-        //private List<PesquisaModel.PerguntaModel> CarregarPergunta()
-        //{
-        //    var lista = new List<PesquisaModel.PerguntaModel>();
-        //    for (int i = 1; i < 11; i++)
-        //    {
-        //        lista.Add(new Belgo.Web.Models.PesquisaModel.PerguntaModel()
-        //        {
-        //            ID = i,
-        //            Titulo = "Título da pergunta " + i,
-        //            DataCadastro = DateTime.Now.AddDays(-i)
-        //        });
-        //    }
-        //    return lista;
-        //}
-
-        //private List<PesquisaModel.PerguntaModel> CarregarResposta()
-        //{
-        //    var lista = new List<PesquisaModel.PerguntaModel>();
-        //    for (int i = 1; i < 11; i++)
-        //    {
-        //        lista.Add(new Belgo.Web.Models.PesquisaModel.PerguntaModel()
-        //        {
-        //            ID = i,
-        //            Titulo = "Título da resposta " + i,
-        //            DataCadastro = DateTime.Now.AddDays(-i)
-        //        });
-        //    }
-        //    return lista;
-        //}
-
-
         private List<PesquisaModel> CarregarPesquisa()
-{
+        {
 
-    var api = new RestApi();
-    api.Method = Method.GET;
-    api.Resource = RestApi.Resources.Pesquisa;
-    var lista = api.Executar<List<Pesquisa>>();
+            var api = new RestApi();
+            api.Method = Method.GET;
+            api.Resource = RestApi.Resources.Pesquisa;
 
-    var retorno = lista.Data.Select(p => new PesquisaModel
-    {
-        ID = p.ID,
-        Nome = p.Nome,
-        DataCriacao = p.DataCriacao,
-        Fechado = p.Fechado,
-        TotalPerguntas = p.Perguntas.Count()
+            var lista = api.Executar<List<Pesquisa>>();
 
-    }).ToList();
+            var retorno = lista.Data.Select(p => new PesquisaModel
+            {
+                ID = p.ID,
+                Nome = p.Nome,
+                DataCriacao = p.DataCriacao,
+                Fechado = p.Fechado,
+                Perguntas = p.Perguntas.Select(i => new PerguntaModel() { ID = i.ID }).ToList()
+
+            }).ToList();
 
 
-    return retorno;
+            return retorno;
 
-}
+        }
 
-private void TiposPerguntas()
-{
-    var tiposPergunta = from Enumerador.TipoPergunta s in Enum.GetValues(typeof(Enumerador.TipoPergunta))
-                        select new { ID = s, Name = Enumerador.GetDescription(s) };
+        private void TiposPerguntas()
+        {
+            var tiposPergunta = from Enumerador.TipoPergunta s in Enum.GetValues(typeof(Enumerador.TipoPergunta))
+                                select new { ID = s, Name = Enumerador.GetDescription(s) };
 
-    ViewBag.TiposPergunta = tiposPergunta;
-}
+            ViewBag.TiposPergunta = tiposPergunta;
+        }
 
 
     }

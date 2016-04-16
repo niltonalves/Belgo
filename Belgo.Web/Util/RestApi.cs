@@ -15,6 +15,8 @@ namespace Belgo.Web.Util
 
         public Method Method { get; set; }
         public Resources Resource { get; set; }
+        public string DateFormat { get; set; }
+        public string Action { get; set; }
 
         /// <summary>
         /// Executa a chamada a api
@@ -34,10 +36,18 @@ namespace Belgo.Web.Util
                 if (segment == null)
                     request = new RestRequest(Resource.ToString());
                 else
-                    request = new RestRequest(string.Format("{0}/{1}", Resource.ToString(), segment.Value));
-                 
-                request.Method = this.Method;
+                {
+                    if (!string.IsNullOrEmpty(Action))
+                        request = new RestRequest(string.Format("{0}/{1}/{2}", Resource.ToString(), Action, segment.Value));
+                    else
+                        request = new RestRequest(string.Format("{0}/{1}", Resource.ToString(), segment.Value));
+                }
+
+                if (this.DateFormat != null)
+                    request.DateFormat = DateFormat;
+
                 //request.RequestFormat = DataFormat.Json;
+                request.Method = this.Method;
                 request.AddHeader("Content-type", "application/json");
                 request.Parameters.Clear();
                 parametros.Where(p => p.Type != ParameterType.UrlSegment).ToList()

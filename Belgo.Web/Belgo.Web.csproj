@@ -304,6 +304,8 @@
     <Content Include="Views\Pesquisa\_CadastrarResposta.cshtml" />
     <Content Include="Views\Pesquisa\_ExcluirResposta.cshtml" />
     <Content Include="Views\Pesquisa\_Visualizar.cshtml" />
+    <Content Include="Views\Pesquisa\_ExcluirPergunta.cshtml" />
+    <Content Include="Views\Pesquisa\_ExcluirPesquisa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

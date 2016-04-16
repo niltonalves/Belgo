@@ -49,8 +49,8 @@ namespace Belgo.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.db.Atualizar(pesquisa);
-                return Ok(HttpStatusCode.NoContent);
+                var retorno = this.db.Atualizar(pesquisa);
+                return Ok(retorno);
             }
 
             return Content(HttpStatusCode.BadRequest, "Erro de entrada");
@@ -72,6 +72,14 @@ namespace Belgo.Api.Controllers
         public IHttpActionResult Delete(int id)
         {
             this.db.Deletar(id);
+
+            return Ok(HttpStatusCode.NoContent);
+        }
+        [HttpPost]
+        [Route("api/pesquisa/publicar/{id}")]
+        public IHttpActionResult Publicar(int id)
+        {
+            this.db.Publicar(id);
 
             return Ok(HttpStatusCode.NoContent);
         }

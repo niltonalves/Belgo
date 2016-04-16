@@ -131,7 +131,7 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        public void Atualizar(Pesquisa pesquisa)
+        public long Atualizar(Pesquisa pesquisa)
         {
             try
             {
@@ -140,6 +140,8 @@ namespace Belgo.Data.Negocio
 
                 db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                return pesquisa.ID;
 
             }
             catch (Exception ex)
@@ -181,8 +183,7 @@ namespace Belgo.Data.Negocio
                 throw;
             }
         }
-
-
+        
 
         #region implementação de dispose
         ~PesquisaDados()

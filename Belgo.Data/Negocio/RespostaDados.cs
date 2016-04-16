@@ -45,7 +45,9 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var retorno = db.CAD_RESPOSTA.AsEnumerable().
+                var retorno = db.CAD_RESPOSTA
+                    .Include("CAD_PERGUNTA")
+                    .AsEnumerable().
                     Select(r => (Comum.TrataResposta(r))).FirstOrDefault(r => r.ID == id);
                 return retorno;
             }

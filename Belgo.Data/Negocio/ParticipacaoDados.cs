@@ -26,8 +26,8 @@ namespace Belgo.Data.Negocio
                     .Select(c => new Participacao()
                     {
                         ID = c.COD_PARTICIPACAO,
-                        DataParticipacao = c.DTA_PARTICIPACAO,
-                        DataSincronizacao = c.DTA_SINCRONIZACAO,
+                        DataParticipacao = c.DTA_PARTICIPACAO.ToString(),
+                        DataSincronizacao = c.DTA_SINCRONIZACAO.ToString(),
                         Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
                         RespostaNula = c.IND_RESPOSTA_NULA,
                     }).ToList();
@@ -55,8 +55,8 @@ namespace Belgo.Data.Negocio
                     .Select(c => new Participacao()
                     {
                         ID = c.COD_PARTICIPACAO,
-                        DataParticipacao = c.DTA_PARTICIPACAO,
-                        DataSincronizacao = c.DTA_SINCRONIZACAO,
+                        DataParticipacao = c.DTA_PARTICIPACAO.ToString(),
+                        DataSincronizacao = c.DTA_SINCRONIZACAO.ToString(),
                         Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
                         RespostaNula = c.IND_RESPOSTA_NULA,
                     }).FirstOrDefault();
@@ -86,10 +86,10 @@ namespace Belgo.Data.Negocio
                     COD_PERGUNTA = participacao.IdPergunta,
                     DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
                     IND_RESPOSTA_NULA = participacao.RespostaNula,
-                    DTA_PARTICIPACAO = participacao.DataParticipacao,
-                    DTA_SINCRONIZACAO = participacao.DataSincronizacao,
+                    DTA_PARTICIPACAO = Convert.ToDateTime(participacao.DataParticipacao),
+                    DTA_SINCRONIZACAO = Convert.ToDateTime(participacao.DataSincronizacao),
                 };
-                
+
                 db.CAD_PARTICIPACAO.Add(cadastro);
                 var retorno = db.SaveChanges();
 
@@ -112,8 +112,8 @@ namespace Belgo.Data.Negocio
                     COD_PERGUNTA = participacao.IdPergunta,
                     DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
                     IND_RESPOSTA_NULA = participacao.RespostaNula,
-                    DTA_PARTICIPACAO = participacao.DataParticipacao,
-                    DTA_SINCRONIZACAO = participacao.DataSincronizacao,
+                    DTA_PARTICIPACAO = Convert.ToDateTime(participacao.DataParticipacao),
+                    DTA_SINCRONIZACAO = Convert.ToDateTime(participacao.DataSincronizacao)
                 };
 
                 db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
