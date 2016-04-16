@@ -56,8 +56,11 @@
     @RenderSection("scripts", required: false)
     <script>
         $(function () {
-            $('[data-tooltip="tooltip"]').tooltip()
-        })
+            $('[data-tooltip="tooltip"]').tooltip();
+            $("input:text[required]")
+                .attr("pattern", "( *?[0-9a-zA-Z] *?){3,}")
+                .attr("title", "Digite no mínimo 3 caracteres");
+        });
     </script>
 </body>
 </html>

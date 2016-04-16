@@ -1,13 +1,13 @@
 ﻿@model Belgo.Web.Models.PesquisaModel.RespostaModel
 <!--modal cadastrar resposta-->
 
-@using (Html.BeginForm("CadastrarResposta", null, FormMethod.Post))
+@using (Html.BeginForm("CadastrarResposta", null, FormMethod.Post, new { id = "form-resposta" }))
 {
 
     @Html.HiddenFor(m => Model.ID)
 
     @Html.HiddenFor(m => Model.IdPergunta)
-    @Html.HiddenFor(m => Model.IdPesquisa, new {@value = Request["idPesquisa"] })
+    @Html.HiddenFor(m => Model.IdPesquisa, new { @value = Request["idPesquisa"] })
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

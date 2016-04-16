@@ -15,39 +15,42 @@
 
             foreach (var pergunta in Model.Perguntas)
             {
-                <h4><strong>@pergunta.Descricao</strong> </h4>
+            
+                <h4 class="@(pergunta.Respostas.Count == 0 & pergunta.Tipo!="D" ? "red" : "")"><strong>@pergunta.Descricao</strong> </h4>
 
-                foreach (var resposta in pergunta.Respostas)
+                if (pergunta.Tipo == "D")
                 {
-                    var tipo = (Belgo.Web.Util.Enumerador.TipoPergunta)Enum.Parse(typeof(Belgo.Web.Util.Enumerador.TipoPergunta), pergunta.Tipo.ToString(), true);
-
-                    switch (tipo)
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" placeholder="Digite sua resposta"></textarea>
+                    </div>
+                }
+                else
+                {
+                    if (pergunta.Respostas.Count == 0) { <div class="red">Resposta não cadastrada.</div> }
+                    foreach (var resposta in pergunta.Respostas)
                     {
-                        case Belgo.Web.Util.Enumerador.TipoPergunta.U:
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
-                                    @resposta.Descricao
-                                </label>
-                            </div>
-                            break;
-                        case Belgo.Web.Util.Enumerador.TipoPergunta.M:
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" value="">
-                                    @resposta.Descricao
-                                </label>
-                            </div>
+                        var tipo = (Belgo.Web.Util.Enumerador.TipoPergunta)Enum.Parse(typeof(Belgo.Web.Util.Enumerador.TipoPergunta), pergunta.Tipo.ToString(), true);
 
-                            break;
-                        case Belgo.Web.Util.Enumerador.TipoPergunta.D:
-                            <div class="form-group">
-                                <label for="">@resposta.Descricao</label>
-                                <textarea class="form-control" rows="3" placeholder="Digite sua resposta"></textarea>
-                            </div>
+                        switch (tipo)
+                        {
+                            case Belgo.Web.Util.Enumerador.TipoPergunta.U:
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
+                                        @resposta.Descricao
+                                    </label>
+                                </div>
+                                break;
+                            case Belgo.Web.Util.Enumerador.TipoPergunta.M:
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">
+                                        @resposta.Descricao
+                                    </label>
+                                </div>
 
-                            break;
-
+                                break;
+                        }
                     }
 
                 }
@@ -64,10 +67,10 @@
             @if (Model.Fechado)
             {
                 <button class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    }
-                    else
-                    {
-                        var contemPergunta = Model.Perguntas.Count() > 0;
+            }
+            else
+            {
+                var contemPergunta = Model.Perguntas.Count() > 0;
 
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="submit" role="button" class="btn btn-danger @(contemPergunta ? "" : "disabled" )" data-tooltip="tooltip" title="Não há como publicar pesquisa sem pergunta.">
@@ -81,7 +84,7 @@
 
 
 <script>
-        $(function () {
-            $('[data-tooltip="tooltip"]').tooltip()
-        })
+    $(function () {
+        $('[data-tooltip="tooltip"]').tooltip()
+    })
 </script>

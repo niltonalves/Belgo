@@ -39,7 +39,7 @@ namespace Belgo.Api.Controllers
             if (ModelState.IsValid)
             {
                 this.db.Atualizar(pergunta);
-                return Ok(HttpStatusCode.NoContent);
+                return Ok(id);
             }
 
             return Content(HttpStatusCode.BadRequest, "Erro de entrada");
