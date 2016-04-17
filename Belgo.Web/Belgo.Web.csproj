@@ -144,7 +144,6 @@
     <Compile Include="Util\Comum.cs" />
     <Compile Include="Util\Enumerador.cs" />
     <Compile Include="Util\RestApi.cs" />
-    <Content Include="App_Code\RestApi.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -310,7 +309,6 @@
     <Content Include="Views\Relatorio\ExportarExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="bin\" />
   </ItemGroup>
   <ItemGroup>
