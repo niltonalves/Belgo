@@ -51,6 +51,7 @@ namespace Belgo.Web.Controllers
             return View(pesquisaModel);
 
         }
+
         [HttpPost]
         public ActionResult Cadastrar(PesquisaModel model)
         {
@@ -76,6 +77,7 @@ namespace Belgo.Web.Controllers
             return RedirectToAction("Cadastrar", new { id = retorno.Data });
 
         }
+
         public ActionResult Excluir(int id, bool? efetuar)
         {
             if (Convert.ToBoolean(efetuar))
@@ -122,7 +124,6 @@ namespace Belgo.Web.Controllers
                     model.Ordem = _pergunta.Ordem;
                     model.DataCriacao = _pergunta.DataCriacao;
                     model.Tipo = _pergunta.Tipo;
-                    model.IdPesquisa = _pergunta.IdPesquisa;
                     if (_pergunta.Respostas != null)
                         model.Respostas = _pergunta.Respostas.Select(r => new RespostaModel() { ID = r.ID, Descricao = r.Descricao, DataCriacao = r.DataCriacao, IdPergunta = r.IdPergunta }).ToList();
 
@@ -138,6 +139,34 @@ namespace Belgo.Web.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult ReordenarPergunta(string[] ordem)
+        {
+            try
+            {
+                
+                for(var i=0; i <= ordem.Length; i++)
+                {
+                    int indice = i + 1;
+                    var api = new RestApi();
+                    api.Method = Method.POST;
+                    api.Resource = RestApi.Resources.Pergunta;
+                    api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = ordem[i] });
+                    api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "ID", Value = ordem[i] });
+                    api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "Ordem", Value = indice });
+                    api.Executar<long>();
+
+                };
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return View();
+        }
+
         [HttpPost]
         public ActionResult CadastrarPergunta(PerguntaModel model)
         {
@@ -165,9 +194,8 @@ namespace Belgo.Web.Controllers
 
             var cadastro = api.Executar<long>();
 
-            return RedirectToAction("CadastrarPergunta", new { id = cadastro.Data , idPesquisa =  model.IdPesquisa });
+            return RedirectToAction("CadastrarPergunta", new { id = cadastro.Data, idPesquisa = model.IdPesquisa });
         }
-
 
         [HttpPost]
         public ActionResult Publicar(PesquisaModel model)
@@ -225,7 +253,6 @@ namespace Belgo.Web.Controllers
 
         }
 
-
         public ActionResult ExcluirResposta(long id, long idPergunta, long idPesquisa, bool? efetuar)
         {
             if (Convert.ToBoolean(efetuar))
@@ -255,7 +282,6 @@ namespace Belgo.Web.Controllers
             };
             return PartialView("_ExcluirResposta", model);
         }
-
 
         public ActionResult CadastrarResposta(long? id, long idPergunta, long? idPesquisa)
         {
@@ -317,7 +343,6 @@ namespace Belgo.Web.Controllers
             }
             return RedirectToAction("CadastrarPergunta", new { id = model.IdPergunta, idPesquisa = model.IdPesquisa });
         }
-
 
         public ActionResult Visualizar(long id)
         {

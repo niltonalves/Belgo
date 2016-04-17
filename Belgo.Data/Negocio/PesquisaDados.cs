@@ -38,7 +38,7 @@ namespace Belgo.Data.Negocio
                                   {
                                       Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
 
-                                  }).ToList()
+                                  }).OrderBy(c => c.Ordem).ToList()
                               }).OrderBy(p => p.DataCriacao).ToList();
 
                 if (fechado != null)
@@ -76,7 +76,7 @@ namespace Belgo.Data.Negocio
                                   {
                                       Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
 
-                                  }).ToList()
+                                  }).OrderBy(c => c.Ordem).ToList()
                               }).FirstOrDefault(c => c.ID == id);
                 return retorno;
 
@@ -183,7 +183,48 @@ namespace Belgo.Data.Negocio
                 throw;
             }
         }
-        
+
+
+        public Pesquisa RelatorioParticipacao(long id)
+        {
+            try
+            {
+                var retorno = (from p in db.CAD_PESQUISA
+                                               .Include("CAD_PERGUNTA")
+                                              .Include("CAD_PERGUNTA.CAD_RESPOSTA")
+                                        .Include("CAD_PERGUNTA.CAD_PARTICIPACAO")
+
+                               select p).Where(e => e.COD_PESQUISA==id & e.CAD_PERGUNTA.Any(r => r.CAD_PARTICIPACAO.Count() != 0))
+                               .AsEnumerable()
+                                .Select(a => new Pesquisa()
+                                {
+                                    Nome = a.NOM_PESQUISA,
+                                    Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                                    {
+                                        Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList(),
+                                        Participacoes = b.CAD_PARTICIPACAO.Select(p => new Participacao()
+                                        {
+                                            RespostaNula = p.IND_RESPOSTA_NULA,
+                                            DataParticipacao = Convert.ToDateTime(p.DTA_PARTICIPACAO).ToString("DD/mm/yyyy HH:MM:ss"),
+                                            DataSincronizacao = Convert.ToDateTime(p.DTA_SINCRONIZACAO).ToString("DD/mm/yyyy HH:MM:ss"),
+                                            Descricao = p.DSC_RESPOSTA_DISSERTATIVA,
+                                            IdResposta = p.COD_RESPOSTA,
+                                            IdPergunta = p.COD_PERGUNTA
+                                        }).ToList()
+                                    }).ToList()
+                                }).FirstOrDefault();
+
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+
 
         #region implementação de dispose
         ~PesquisaDados()

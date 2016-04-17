@@ -140,6 +140,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Util\Comum.cs" />
     <Compile Include="Util\Enumerador.cs" />
     <Compile Include="Util\RestApi.cs" />
@@ -268,8 +269,7 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery-ui-1.8.24.js" />
-    <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -306,6 +306,8 @@
     <Content Include="Views\Pesquisa\_Visualizar.cshtml" />
     <Content Include="Views\Pesquisa\_ExcluirPergunta.cshtml" />
     <Content Include="Views\Pesquisa\_ExcluirPesquisa.cshtml" />
+    <Content Include="Views\Relatorio\Index.cshtml" />
+    <Content Include="Views\Relatorio\ExportarExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

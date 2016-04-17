@@ -10,13 +10,11 @@
         <h4 class="modal-title">Visualizar pesquisa - @Model.Nome</h4>
     </div>
     <div class="modal-body">
-
         @{
-
             foreach (var pergunta in Model.Perguntas)
             {
-            
-                <h4 class="@(pergunta.Respostas.Count == 0 & pergunta.Tipo!="D" ? "red" : "")"><strong>@pergunta.Descricao</strong> </h4>
+           
+                <h4 class="@(pergunta.Respostas.Count == 0 & pergunta.Tipo!="D" ? "red" : "")"><strong>@pergunta.Ordem) @pergunta.Descricao</strong> </h4>
 
                 if (pergunta.Tipo == "D")
                 {
@@ -26,7 +24,8 @@
                 }
                 else
                 {
-                    if (pergunta.Respostas.Count == 0) { <div class="red">Resposta não cadastrada.</div> }
+                    if (pergunta.Respostas.Count == 0)
+                    { <div class="red">Resposta não cadastrada.</div> }
                     foreach (var resposta in pergunta.Respostas)
                     {
                         var tipo = (Belgo.Web.Util.Enumerador.TipoPergunta)Enum.Parse(typeof(Belgo.Web.Util.Enumerador.TipoPergunta), pergunta.Tipo.ToString(), true);
@@ -73,7 +72,7 @@
                 var contemPergunta = Model.Perguntas.Count() > 0;
 
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="submit" role="button" class="btn btn-danger @(contemPergunta ? "" : "disabled" )" data-tooltip="tooltip" title="Não há como publicar pesquisa sem pergunta.">
+                <button type="submit" role="button" class="btn btn-danger @(contemPergunta ? "" : "disabled" )" data-tooltip="tooltip" title="@(contemPergunta ? "" : "Não há como publicar pesquisa sem pergunta." )">
                     Publicar
                 </button>
             }

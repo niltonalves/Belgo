@@ -35,7 +35,7 @@ namespace Belgo.Data.Negocio
                                   Ordem = Convert.ToInt16(a.NUM_ORDEM_PERGUNTA),
                                   IdPesquisa = a.COD_PERGUNTA,
                                   Respostas = a.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
-                              }).OrderBy(p => p.DataCriacao).ToList();
+                              }).OrderBy(p => p.Ordem).ToList();
 
                 return retorno;
             }
@@ -126,17 +126,18 @@ namespace Belgo.Data.Negocio
             }
 
         }
-        public void Atualizar(Pergunta pergunta)
+        public long Atualizar(Pergunta pergunta)
         {
             try
             {
                 var cadastro = this.ConsultarPergunta(pergunta.ID);
 
-                cadastro.DSC_PERGUNTA = pergunta.Descricao;
-                cadastro.NUM_ORDEM_PERGUNTA = pergunta.Ordem;
+                cadastro.DSC_PERGUNTA = string.IsNullOrEmpty(pergunta.Descricao) ? cadastro.DSC_PERGUNTA : pergunta.Descricao;
+                cadastro.NUM_ORDEM_PERGUNTA = (pergunta.Ordem==0) ? cadastro.NUM_ORDEM_PERGUNTA : pergunta.Ordem;
 
                 db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                return pergunta.ID;
             }
             catch (Exception ex)
             {

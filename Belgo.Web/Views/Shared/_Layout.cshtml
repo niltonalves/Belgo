@@ -52,13 +52,15 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/Scripts/Bootstrap")
+   
     @RenderSection("scripts", required: false)
     <script>
         $(function () {
             $('[data-tooltip="tooltip"]').tooltip();
             $("input:text[required]")
-                .attr("pattern", "( *?[0-9a-zA-Z] *?){3,}")
+                .attr("pattern", "( *?[a-zA-Zá-úÁ-ú0-9çÇÃã.,?!/-] *?){3,}")
                 .attr("title", "Digite no mínimo 3 caracteres");
         });
     </script>

@@ -29,6 +29,14 @@ namespace Belgo.Api.Controllers
             var retorno = db.Listar(publicado);
             return retorno;
         }
+        [HttpGet]
+        [Route("api/pesquisa/relatorioparticipacao/{id}")]
+        public Pesquisa GetRelatioParticipacao(long id)
+        {
+            var retorno = db.RelatorioParticipacao(id);
+
+            return retorno;
+        }
 
 
         [HttpGet]

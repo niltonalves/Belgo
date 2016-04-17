@@ -12,7 +12,7 @@
         <div class="form-medio">
             @if (Model.ID != 0)
             {
-                @Html.HiddenFor(m=> Model.ID)
+                @Html.HiddenFor(m => Model.ID)
                 <div class="pull-right">
                     <button type="button" class="btn btn-link" title="Visualizar pesquisa" data-tooltip="tooltip" data-toggle="modal" data-acao="Visualizar" data-id="@Model.ID" data-target="#modal-visualizar">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Visualizar
@@ -41,10 +41,10 @@
                 {
                     <div class="panel panel-default">
                         <div class="panel-heading gray">Perguntas cadastradas</div>
-                        <table class="table table-hover">
+                        <table class="table table-hover perguntas">
                             <thead>
                                 <tr class="gray">
-                                    <th>ID</th>
+                                    <th class="text-center">Ordem</th>
                                     <th>Título</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Total de Respostas</th>
@@ -52,13 +52,13 @@
                                     <th class="text-center">Ação</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="sort">
                                 @{foreach (var item in Model.Perguntas)
                                     {
                                         var totalRespostas = item.Respostas.Count();
                                         var tipo = Belgo.Web.Util.Enumerador.GetDescription((Belgo.Web.Util.Enumerador.TipoPergunta)Enum.Parse(typeof(Belgo.Web.Util.Enumerador.TipoPergunta), item.Tipo));
-                                         <tr>
-                                            <td>@item.ID</td>
+                                        <tr id="@item.ID">
+                                            <td class="text-center">@item.Ordem</td>
                                             <td>@item.Descricao</td>
                                             <td class="text-center">@tipo</td>
                                             <td class="text-center">@totalRespostas</td>
@@ -117,6 +117,26 @@
     <script>
         $(function () {
 
+            $('.sort').sortable({
+                cursor: 'move',
+                axis: 'y',
+                update: function (e, ui) {
+                    $('table tr').each(function () {
+                        var ordem = $(this).index() + 1;
+                        $(this).children('td:first-child').html(ordem)
+                    });
+                    href = '@Url.Action("ReordenarPergunta")';
+                    var ordem = JSON.stringify({ ordem: $(this).sortable('toArray') })
+                    $.ajax({
+                        type: 'POST',
+                        url: href,
+                        contentType: 'application/json',
+                        data: ordem
+
+                    });
+                }
+            }).disableSelection();
+
             $('#modal-visualizar, #modal-excluir').on('show.bs.modal', function (e) {
                 var $modal = $(this);
                 var id = $(e.relatedTarget).attr("data-id");
@@ -126,7 +146,7 @@
                     cache: false,
                     type: 'GET',
                     url: "@Url.Content("~/Pesquisa/")" + acao,
-                    data: { "id": id , "idPesquisa" : idPesquisa},
+                    data: { "id": id, "idPesquisa": idPesquisa },
                     success: function (data) {
                         $modal.find('.modal-content').html(data);
                     }

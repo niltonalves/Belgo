@@ -1,19 +1,13 @@
 ﻿@model List<Belgo.Web.Models.PesquisaModel>
 @{
-    ViewBag.Title = "Pesquisas";
+    ViewBag.Title = "Relatório";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="pull-right">
-    <a href="@Url.Action("Cadastrar")" role="button" class="btn btn-link" title="Cadastrar nova pesquisa" data-tooltip="tooltip">
-        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Nova pesquisa
-    </a>
-</div>
+
 <p class="clearfix"></p>
 
 
 <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading gray">Pesquisas Cadastradas</div>
 
     @using (Html.BeginForm("Publicar", null, FormMethod.Post))
     {
@@ -42,15 +36,10 @@
                                 <span aria-hidden="true" class="glyphicon @(item.Fechado ? "glyphicon-ok green" : "glyphicon-pencil red") "></span> @(item.Fechado ? " Publicado" : " Editando" )
                             </td>
                             <td class="text-center">
-                                <a href="@Url.Action("Cadastrar", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red @(item.Fechado ? "disabled" : "")" title="Editar" data-tooltip="tooltip">
-                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                <a href="@Url.Action("ExportarExcel", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red" title="Exportar para Excel" data-tooltip="tooltip">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                                 </a>
-                                <button type="button" class="btn btn-default btn-xs red " title="@(item.Fechado ? "Visualizar Pesquisa" : "Visualizar e Publicar Pesquisa")" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-visualizar" data-id="@item.ID" data-acao="Visualizar">
-                                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-                                </button>
-                                <button type="button" class="btn btn-default btn-xs red @(item.Fechado ? "disabled" : "") @(totalPerguntas >0 ? "disabled" : "" )" title="@(totalPerguntas > 0 ? "Não é possível excluir quando existe pergunta cadastrada." : "")" data-tooltip="tooltip" data-id="@item.ID" data-acao="Excluir" data-target="@(item.Fechado ? "" : "#modal-excluir") " data-toggle="modal">
-                                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                                </button>
+                             
                             </td>
                         </tr>
                     }

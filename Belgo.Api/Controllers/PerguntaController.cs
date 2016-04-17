@@ -32,14 +32,16 @@ namespace Belgo.Api.Controllers
             return Ok(retorno);
         }
 
+
+
         [HttpPost]
         [Route("api/pergunta/{id}")]
         public IHttpActionResult Put(int id, [FromBody]Pergunta pergunta)
         {
             if (ModelState.IsValid)
             {
-                this.db.Atualizar(pergunta);
-                return Ok(id);
+                var retorno = db.Atualizar(pergunta);
+                return Ok(retorno);
             }
 
             return Content(HttpStatusCode.BadRequest, "Erro de entrada");
@@ -53,9 +55,10 @@ namespace Belgo.Api.Controllers
             if (pergunta == null)
                 return Content(HttpStatusCode.BadRequest, "Erro de entrada");
 
-            var retorno = this.db.Cadastrar(pergunta);
+            var retorno = db.Cadastrar(pergunta);
             return Ok(retorno);
         }
+
         [HttpDelete]
         [Route("api/pergunta/{id}")]
         public IHttpActionResult Delete(int id)

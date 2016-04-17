@@ -27,5 +27,6 @@ namespace Belgo.Dados.Entidade
         public DateTime? DataCriacao { get; set; }
         public Usuario UsuarioCriacao { get; set; }
         public List<Resposta> Respostas { get; set; }
+        public List<Participacao> Participacoes { get; set; }
     }
 }
