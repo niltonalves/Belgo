@@ -89,6 +89,7 @@
     <Compile Include="Negocio\ParticipacaoDados.cs" />
     <Compile Include="Negocio\RespostaDados.cs" />
     <Compile Include="Negocio\PesquisaDados.cs" />
+    <Compile Include="Negocio\UsuarioDados.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Comum.cs" />
   </ItemGroup>

@@ -12,11 +12,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static Belgo.Web.Controllers.BaseController;
 using static Belgo.Web.Models.PesquisaModel;
 
 namespace Belgo.Web.Controllers
 {
-    public class RelatorioController : Controller
+    public class RelatorioController : BaseController
     {
         public ActionResult Index()
         {
@@ -52,6 +53,12 @@ namespace Belgo.Web.Controllers
                 api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
                 var lista = api.Executar<Pesquisa>();
 
+                if (lista.Data == null)
+                {
+                    MostrarAlerta(TipoAlerta.Erro, "Não há dados para exportação");
+                    return RedirectToAction("Index");
+                }
+
                 var pesquisa = lista.Data;
 
                 var tiposPergunta = from Enumerador.TipoPergunta s in Enum.GetValues(typeof(Enumerador.TipoPergunta))
@@ -59,7 +66,7 @@ namespace Belgo.Web.Controllers
 
 
                 //total de participacao
-                var total = pesquisa.Perguntas.GroupBy(p => p.ID).Select(c => new { Total = c.Key }).FirstOrDefault().Total;
+                var total = pesquisa.Perguntas.Max(c => c.Participacoes.Count);
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<table width='800' cellspacing='0' cellpadding='2'>");
                 sb.Append("<tr><td align='center' style='background-color: #e31d1a;color:#ffffff' colspan = '3' height='50px'><b>" + pesquisa.Nome + "</b></td></tr>");

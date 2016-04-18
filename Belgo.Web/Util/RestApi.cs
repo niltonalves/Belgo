@@ -33,8 +33,10 @@ namespace Belgo.Web.Util
                 var cliente = new RestClient(urlApi);
                 var segment = parametros.FirstOrDefault(s => s.Type == ParameterType.UrlSegment);
 
-                if (segment == null)
+                if (segment == null & string.IsNullOrEmpty(Action))
                     request = new RestRequest(Resource.ToString());
+                else if (!string.IsNullOrEmpty(Action) & segment == null)
+                    request = new RestRequest(string.Format("{0}/{1}", Resource.ToString(), Action));
                 else
                 {
                     if (!string.IsNullOrEmpty(Action))
@@ -87,8 +89,8 @@ namespace Belgo.Web.Util
             Pesquisa = 1,
             Pergunta,
             Resposta,
-            Participacao
-
+            Participacao,
+            Usuario
         }
     }
 

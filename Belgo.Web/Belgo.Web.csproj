@@ -307,6 +307,7 @@
     <Content Include="Views\Pesquisa\_ExcluirPesquisa.cshtml" />
     <Content Include="Views\Relatorio\Index.cshtml" />
     <Content Include="Views\Relatorio\ExportarExcel.cshtml" />
+    <Content Include="Views\Usuario\_Excluir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />

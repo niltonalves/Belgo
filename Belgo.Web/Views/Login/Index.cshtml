@@ -36,12 +36,17 @@
 </head>
 
 <body class="fundo-login">
+
     @using (Html.BeginForm("Index", null, FormMethod.Post, new { @class = "form-login" }))
     {
         <div class="container">
+            
             <div class="row">
+
                 <div class="Absolute-Center is-Responsive ">
+                    
                     <div class="form-login fundo-cinza gray">
+
                         <div class="text-center">
                             <a class="text-center" href="#"><img src="@Url.Content("~/Content/Images")/logo_topo.png"></a>
                         </div>
@@ -58,6 +63,9 @@
                         </div>
                         <button class="btn btn-lg btn-danger btn-block" type="submit">Entrar</button>
                     </div> <!-- /container -->
+                    <br />
+                    @Html.Partial("_alertas")
+                   
                 </div>
             </div>
         </div>

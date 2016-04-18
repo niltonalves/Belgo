@@ -23,9 +23,6 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>E-mail</th>
-                @*<th>Data do Cadastro</th>
-                <th>Data Último Acesso</th>*@
-                <th>Status</th>
                 <th class="text-center">Ação</th>
             </tr>
         </thead>
@@ -33,21 +30,21 @@
             @{
                 foreach (var item in Model)
                 {
-                    var status = Convert.ToString((Belgo.Web.Models.UsuarioModel.DescricaoStatus)item.Status);
                     <tr>
                         <td>@item.ID</td>
                         <td>@item.Nome</td>
                         <td>@item.Email</td>
-                        @*<td>@item.DataCadastro.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@item.DataUltimoAcesso.ToString("dd/MM/yyyy HH:mm")</td>*@
-                        <td>@status</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip">
+                            <a href="@Url.Action("Cadastrar", new { id = item.ID })" type="button" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs red" title="Resetar senha" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-troca-senha">
+                            </a>
+                            @*<button type="button" class="btn btn-default btn-xs red" title="Resetar senha" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-troca-senha">
                                 <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                            </button>*@
+                            <button type="button" class="btn btn-default btn-xs red" title="Excluir" data-tooltip="tooltip" data-id="@item.ID" data-acao="Excluir" data-target="#modal-excluir" data-toggle="modal">
+                                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
                             </button>
+
                         </td>
                     </tr>
                 }
@@ -75,12 +72,37 @@
         </div>
     </div>
 </div>
-@section Scripts{
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
     <script>
         $(function () {
-            $(".editar").click(function () {
-                window.location.href = "@Url.Action("Cadastrar")";
-            });
-        })
+
+            $('#modal-excluir, #modal-visualizar').on('show.bs.modal', function (e) {
+                var $modal = $(this);
+                var id = $(e.relatedTarget).attr("data-id");
+                var acao = $(e.relatedTarget).attr("data-acao");
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    url: "@Url.Content("~/Usuario/")" + acao,
+                    data: { "id": id },
+                    success: function (data) {
+                        $modal.find('.modal-content').html(data);
+                    }
+                });
+            })
+
+        });
     </script>
 }
+

@@ -12,6 +12,7 @@ namespace Belgo.Web.Models
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
+        public string SenhaAtual { get; set; }
         public short Status { get; set; }
         public DateTime DataCadastro { get; set; }
         public DateTime DataUltimoAcesso { get; set; }

@@ -1,13 +1,10 @@
 ﻿using Belgo.Dados.Entidade;
-using Belgo.Dados.Modelo;
 using Belgo.Web.Models;
 using Belgo.Web.Util;
 using RestSharp;
-using RestSharp.Deserializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using static Belgo.Web.Models.PesquisaModel;
 

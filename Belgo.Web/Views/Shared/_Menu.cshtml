@@ -1,4 +1,10 @@
-﻿<nav class="navbar navbar-default navbar-fixed-top">
+﻿@{
+    var usuario = Belgo.Web.Util.Comum.UsuarioLogado();
+    var nome = usuario.Nome.Split(' ');
+    var primeiroNome = (nome[0]==null ? "" : nome[0]);
+    
+}
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -19,7 +25,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a style="height:55px;"  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Pesquisas</a>
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Pesquisas</a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "Pesquisa")">Listar Pesquisas</a></li>
                         <li><a href="@Url.Action("Cadastrar", "Pesquisa")">Cadastrar Pesquisas</a></li>
@@ -33,14 +39,14 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                
+
                 <li class="dropdown">
-                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> Admin</a>
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> @primeiroNome</a>
                     <ul class="dropdown-menu">
-                        <li><a href="@Url.Action("Cadastrar", "Usuario")">Meus dados</a></li>
+                        <li><a href="@Url.Action("Cadastrar", "Usuario", new {menu = true})">Meus dados</a></li>
                         <li><a href="@Url.Action("Sair", "Login")">Sair</a></li>
                     </ul>
-                   
+
                 </li>
             </ul>
         </div><!--/.nav-collapse -->
