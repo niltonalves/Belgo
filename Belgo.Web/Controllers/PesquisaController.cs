@@ -27,20 +27,9 @@ namespace Belgo.Web.Controllers
                 api.Method = Method.GET;
                 api.Resource = RestApi.Resources.Pesquisa;
                 api.AdicionarParametro(new Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
-                var pesquisa = api.Executar<Pesquisa>();
+                var pesquisa = api.Executar<PesquisaModel>();
 
-                pesquisaModel.ID = pesquisa.Data.ID;
-                pesquisaModel.Nome = pesquisa.Data.Nome;
-
-                pesquisaModel.Perguntas = pesquisa.Data.Perguntas.Select(p => new PesquisaModel.PerguntaModel()
-                {
-                    ID = p.ID,
-                    Descricao = p.Descricao,
-                    DataCriacao = p.DataCriacao,
-                    Ordem = p.Ordem,
-                    Tipo = p.Tipo,
-                    Respostas = p.Respostas.Select(i => new RespostaModel() { ID = i.ID }).ToList()
-                }).ToList();
+                pesquisaModel = pesquisa.Data;
                 Session["Perguntas"] = pesquisaModel.Perguntas;
 
                 return View(pesquisaModel);
@@ -121,6 +110,7 @@ namespace Belgo.Web.Controllers
                     model.Ordem = _pergunta.Ordem;
                     model.DataCriacao = _pergunta.DataCriacao;
                     model.Tipo = _pergunta.Tipo;
+                    model.TipoGrafico = _pergunta.TipoGrafico;
                     if (_pergunta.Respostas != null)
                         model.Respostas = _pergunta.Respostas.Select(r => new RespostaModel() { ID = r.ID, Descricao = r.Descricao, DataCriacao = r.DataCriacao, IdPergunta = r.IdPergunta }).ToList();
 
@@ -133,6 +123,8 @@ namespace Belgo.Web.Controllers
 
             //Tipos de perguntas
             this.TiposPerguntas();
+            //Tipos de gráficos
+            this.TiposGrafico();
 
             return View(model);
         }
@@ -176,6 +168,7 @@ namespace Belgo.Web.Controllers
             api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "IdPesquisa", Value = model.IdPesquisa });
             api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "IdUsuario", Value = usuario.ID });
             api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "Descricao", Value = model.Descricao });
+            api.AdicionarParametro(new Parameter() { Type = ParameterType.RequestBody, Name = "TipoGrafico", Value = model.TipoGrafico });
 
             if (model.ID != 0)
             {
@@ -300,6 +293,7 @@ namespace Belgo.Web.Controllers
                     model.Descricao = _resposta.Descricao;
                     model.IdPergunta = _resposta.IdPergunta;
                     model.IdPesquisa = _resposta.IdPesquisa;
+                    
                 }
             }
             return PartialView("_CadastrarResposta", model);
@@ -407,6 +401,13 @@ namespace Belgo.Web.Controllers
             ViewBag.TiposPergunta = tiposPergunta;
         }
 
+        private void TiposGrafico()
+        {
+            var tiposGrafico = from Enumerador.TipoGrafico s in Enum.GetValues(typeof(Enumerador.TipoGrafico))
+                                select new { ID = s, Name = Enumerador.GetDescription(s) };
+
+            ViewBag.TiposGrafico = tiposGrafico;
+        }
 
     }
 }

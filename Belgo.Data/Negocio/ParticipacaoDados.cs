@@ -28,6 +28,7 @@ namespace Belgo.Data.Negocio
                         ID = c.COD_PARTICIPACAO,
                         DataParticipacao = c.DTA_PARTICIPACAO.ToString(),
                         DataSincronizacao = c.DTA_SINCRONIZACAO.ToString(),
+                        Token  = c.TX_TOKEN,
                         Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
                         RespostaNula = c.IND_RESPOSTA_NULA,
                     }).ToList();
@@ -50,13 +51,13 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-
                 var retorno = db.CAD_PARTICIPACAO.Where(c => c.COD_PARTICIPACAO == id)
                     .Select(c => new Participacao()
                     {
                         ID = c.COD_PARTICIPACAO,
                         DataParticipacao = c.DTA_PARTICIPACAO.ToString(),
                         DataSincronizacao = c.DTA_SINCRONIZACAO.ToString(),
+                        Token = c.TX_TOKEN.ToString(),
                         Descricao = c.DSC_RESPOSTA_DISSERTATIVA,
                         RespostaNula = c.IND_RESPOSTA_NULA,
                     }).FirstOrDefault();
@@ -79,12 +80,12 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-
                 var cadastro = new CAD_PARTICIPACAO()
                 {
                     COD_RESPOSTA = participacao.IdResposta,
                     COD_PERGUNTA = participacao.IdPergunta,
                     DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
+                    TX_TOKEN = participacao.Token,
                     IND_RESPOSTA_NULA = participacao.RespostaNula,
                     DTA_PARTICIPACAO = Convert.ToDateTime(participacao.DataParticipacao),
                     DTA_SINCRONIZACAO = Convert.ToDateTime(participacao.DataSincronizacao),
@@ -111,6 +112,7 @@ namespace Belgo.Data.Negocio
                     COD_RESPOSTA = participacao.IdResposta,
                     COD_PERGUNTA = participacao.IdPergunta,
                     DSC_RESPOSTA_DISSERTATIVA = participacao.Descricao,
+                    TX_TOKEN = participacao.Token,
                     IND_RESPOSTA_NULA = participacao.RespostaNula,
                     DTA_PARTICIPACAO = Convert.ToDateTime(participacao.DataParticipacao),
                     DTA_SINCRONIZACAO = Convert.ToDateTime(participacao.DataSincronizacao)

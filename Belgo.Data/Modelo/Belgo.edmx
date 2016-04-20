@@ -12,6 +12,7 @@
           <Property Name="COD_PARTICIPACAO" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="COD_PERGUNTA" Type="bigint" />
           <Property Name="COD_RESPOSTA" Type="bigint" />
+          <Property Name="TX_TOKEN" Type="nvarchar" MaxLength="36" />
           <Property Name="DSC_RESPOSTA_DISSERTATIVA" Type="varchar" MaxLength="4000" />
           <Property Name="IND_RESPOSTA_NULA" Type="char" MaxLength="1" />
           <Property Name="DTA_PARTICIPACAO" Type="datetime" />
@@ -25,6 +26,7 @@
           <Property Name="COD_PESQUISA" Type="bigint" Nullable="false" />
           <Property Name="DSC_PERGUNTA" Type="varchar" MaxLength="500" />
           <Property Name="IND_TPO_PERGUNTA" Type="char" MaxLength="1" />
+          <Property Name="IND_TPO_GRAFICO" Type="char" MaxLength="1" />
           <Property Name="NUM_ORDEM_PERGUNTA" Type="int" />
           <Property Name="COD_USER_CRIACAO" Type="bigint" />
           <Property Name="DTA_CRIACAO" Type="datetime" />
@@ -224,6 +226,7 @@
           <Property Name="COD_PARTICIPACAO" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="COD_PERGUNTA" Type="Int64" />
           <Property Name="COD_RESPOSTA" Type="Int64" />
+          <Property Name="TX_TOKEN" Type="String" MaxLength="36" FixedLength="false" Unicode="true" />
           <Property Name="DSC_RESPOSTA_DISSERTATIVA" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="IND_RESPOSTA_NULA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DTA_PARTICIPACAO" Type="DateTime" Precision="3" />
@@ -239,6 +242,7 @@
           <Property Name="COD_PESQUISA" Type="Int64" Nullable="false" />
           <Property Name="DSC_PERGUNTA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IND_TPO_PERGUNTA" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="IND_TPO_GRAFICO" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="NUM_ORDEM_PERGUNTA" Type="Int32" />
           <Property Name="COD_USER_CRIACAO" Type="Int64" />
           <Property Name="DTA_CRIACAO" Type="DateTime" Precision="3" />
@@ -369,7 +373,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -382,6 +386,7 @@
                 <ScalarProperty Name="DTA_PARTICIPACAO" ColumnName="DTA_PARTICIPACAO" />
                 <ScalarProperty Name="IND_RESPOSTA_NULA" ColumnName="IND_RESPOSTA_NULA" />
                 <ScalarProperty Name="DSC_RESPOSTA_DISSERTATIVA" ColumnName="DSC_RESPOSTA_DISSERTATIVA" />
+                <ScalarProperty Name="TX_TOKEN" ColumnName="TX_TOKEN" />
                 <ScalarProperty Name="COD_RESPOSTA" ColumnName="COD_RESPOSTA" />
                 <ScalarProperty Name="COD_PERGUNTA" ColumnName="COD_PERGUNTA" />
                 <ScalarProperty Name="COD_PARTICIPACAO" ColumnName="COD_PARTICIPACAO" />
@@ -394,6 +399,7 @@
                 <ScalarProperty Name="DTA_CRIACAO" ColumnName="DTA_CRIACAO" />
                 <ScalarProperty Name="COD_USER_CRIACAO" ColumnName="COD_USER_CRIACAO" />
                 <ScalarProperty Name="NUM_ORDEM_PERGUNTA" ColumnName="NUM_ORDEM_PERGUNTA" />
+                <ScalarProperty Name="IND_TPO_GRAFICO" ColumnName="IND_TPO_GRAFICO" />
                 <ScalarProperty Name="IND_TPO_PERGUNTA" ColumnName="IND_TPO_PERGUNTA" />
                 <ScalarProperty Name="DSC_PERGUNTA" ColumnName="DSC_PERGUNTA" />
                 <ScalarProperty Name="COD_PESQUISA" ColumnName="COD_PESQUISA" />

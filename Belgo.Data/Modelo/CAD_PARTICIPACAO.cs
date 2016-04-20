@@ -17,6 +17,7 @@ namespace Belgo.Dados.Modelo
         public long COD_PARTICIPACAO { get; set; }
         public Nullable<long> COD_PERGUNTA { get; set; }
         public Nullable<long> COD_RESPOSTA { get; set; }
+        public string TX_TOKEN { get; set; }
         public string DSC_RESPOSTA_DISSERTATIVA { get; set; }
         public string IND_RESPOSTA_NULA { get; set; }
         public Nullable<System.DateTime> DTA_PARTICIPACAO { get; set; }

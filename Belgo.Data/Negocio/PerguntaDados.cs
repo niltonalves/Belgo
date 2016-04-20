@@ -32,6 +32,7 @@ namespace Belgo.Data.Negocio
                                   Descricao = a.DSC_PERGUNTA,
                                   DataCriacao = a.DTA_CRIACAO,
                                   Tipo = a.IND_TPO_PERGUNTA,
+                                  TipoGrafico = a.IND_TPO_GRAFICO,
                                   Ordem = Convert.ToInt16(a.NUM_ORDEM_PERGUNTA),
                                   IdPesquisa = a.COD_PERGUNTA,
                                   Respostas = a.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
@@ -63,6 +64,7 @@ namespace Belgo.Data.Negocio
                                    Descricao = a.DSC_PERGUNTA,
                                    DataCriacao = a.DTA_CRIACAO,
                                    Tipo = a.IND_TPO_PERGUNTA,
+                                   TipoGrafico = a.IND_TPO_GRAFICO,
                                    Ordem = Convert.ToInt16(a.NUM_ORDEM_PERGUNTA),
                                    IdPesquisa = a.COD_PERGUNTA,
                                    Respostas = a.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
@@ -111,6 +113,7 @@ namespace Belgo.Data.Negocio
                     DTA_CRIACAO = DateTime.Now,
                     NUM_ORDEM_PERGUNTA = ordem,
                     IND_TPO_PERGUNTA = pergunta.Tipo,
+                    IND_TPO_GRAFICO = pergunta.TipoGrafico,
                     COD_USER_CRIACAO = pergunta.IdUsuario
                 };
 
@@ -134,6 +137,7 @@ namespace Belgo.Data.Negocio
 
                 cadastro.DSC_PERGUNTA = string.IsNullOrEmpty(pergunta.Descricao) ? cadastro.DSC_PERGUNTA : pergunta.Descricao;
                 cadastro.NUM_ORDEM_PERGUNTA = (pergunta.Ordem==0) ? cadastro.NUM_ORDEM_PERGUNTA : pergunta.Ordem;
+                cadastro.IND_TPO_GRAFICO = pergunta.TipoGrafico;
 
                 db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

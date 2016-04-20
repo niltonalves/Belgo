@@ -38,6 +38,7 @@ namespace Belgo.Dados.Util
                 Descricao = pergunta.DSC_PERGUNTA,
                 Ordem = Convert.ToInt16(pergunta.NUM_ORDEM_PERGUNTA),
                 Tipo = pergunta.IND_TPO_PERGUNTA,
+                TipoGrafico = pergunta.IND_TPO_GRAFICO,
                 IdPesquisa = pergunta.COD_PESQUISA,
                 IdUsuario = pergunta.COD_USER_CRIACAO,
                 UsuarioCriacao = TrataUsuario(pergunta.SCA_USUARIO)

@@ -92,7 +92,8 @@ namespace Belgo.Web.Controllers
                 api.Executar<long>();
 
                 MostrarAlerta(TipoAlerta.Sucesso, mensagem);
-                if (Request["menu"]!=null)
+
+                if (!String.IsNullOrEmpty(Request["menu"]))
                 {
                     MostrarAlerta(TipoAlerta.Sucesso, "Dados alterados com sucesso.");
                     return RedirectToAction("Cadastrar", new {menu = true });

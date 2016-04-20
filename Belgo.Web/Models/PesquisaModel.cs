@@ -29,16 +29,19 @@ namespace Belgo.Web.Models
             public PerguntaModel()
             {
                 this.Respostas = new List<RespostaModel>();
+                this.Participacoes = new List<ParticipacaoModel>();
             }
             public Int64 ID { get; set; }
             public Int64 IdPesquisa { get; set; }
             public Int64? IdUsuario { get; set; }
             public string Descricao { get; set; }
             public string Tipo { get; set; }
+            public string TipoGrafico { get; set; }
             public short Ordem { get; set; }
             public DateTime? DataCriacao { get; set; }
             public Usuario UsuarioCriacao { get; set; }
             public List<RespostaModel> Respostas { get; set; }
+            public List<ParticipacaoModel> Participacoes { get; set; }
         }
 
         public class RespostaModel

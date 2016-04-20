@@ -31,7 +31,10 @@
                 <span class="input-group-addon">Tipo da pergunta&nbsp;&nbsp;&nbsp;</span>
                 @Html.DropDownListFor(m => Model.Tipo, new SelectList(ViewBag.TiposPergunta, "Id", "Name"), new { @class = "form-control input-normal ", placeholder = "Digite o título da pergunta", required = "required" })
             </div>
-
+            <div class="input-group">
+                <span class="input-group-addon">Tipo de gráfico&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                @Html.DropDownListFor(m => Model.TipoGrafico, new SelectList(ViewBag.TiposGrafico, "Id", "Name"), new { @class = "form-control input-normal ", required = "required" })
+            </div>
             <div class="modal-footer">
                 <a href="@Url.Action("Cadastrar", new {id = Model.IdPesquisa })" role="button" class="btn btn-default cancelar">Cancelar</a>
                 <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>

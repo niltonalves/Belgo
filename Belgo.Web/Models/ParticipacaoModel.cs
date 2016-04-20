@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Belgo.Dados.Entidade
+namespace Belgo.Web.Models
 {
-    public class Participacao
+    public class ParticipacaoModel
     {
         public long ID { get; set; }
         public long? IdPergunta { get; set; }
@@ -15,5 +15,6 @@ namespace Belgo.Dados.Entidade
         public string RespostaNula { get; set; }
         public string DataParticipacao { get; set; }
         public string DataSincronizacao { get; set; }
+
     }
 }

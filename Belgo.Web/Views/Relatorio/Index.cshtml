@@ -36,6 +36,10 @@
                                 <span aria-hidden="true" class="glyphicon @(item.Fechado ? "glyphicon-ok green" : "glyphicon-pencil red") "></span> @(item.Fechado ? " Publicado" : " Editando" )
                             </td>
                             <td class="text-center">
+                                <a href="@Url.Action("Grafico", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red" title="Gerar gráficos" data-tooltip="tooltip">
+                                    <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                                </a>
+
                                 <a href="@Url.Action("ExportarExcel", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red" title="Exportar para Excel" data-tooltip="tooltip">
                                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                                 </a>

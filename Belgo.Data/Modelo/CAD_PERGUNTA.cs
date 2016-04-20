@@ -25,6 +25,7 @@ namespace Belgo.Dados.Modelo
         public long COD_PESQUISA { get; set; }
         public string DSC_PERGUNTA { get; set; }
         public string IND_TPO_PERGUNTA { get; set; }
+        public string IND_TPO_GRAFICO { get; set; }
         public Nullable<int> NUM_ORDEM_PERGUNTA { get; set; }
         public Nullable<long> COD_USER_CRIACAO { get; set; }
         public Nullable<System.DateTime> DTA_CRIACAO { get; set; }

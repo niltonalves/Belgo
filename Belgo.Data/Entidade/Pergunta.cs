@@ -16,6 +16,7 @@ namespace Belgo.Dados.Entidade
             this.Ordem = _pergunta.Ordem;
             this.DataCriacao = _pergunta.DataCriacao;
             this.IdPesquisa = _pergunta.IdPesquisa;
+            this.TipoGrafico = _pergunta.TipoGrafico;
         }
 
         public Int64 ID { get; set; }
@@ -23,6 +24,7 @@ namespace Belgo.Dados.Entidade
         public Int64? IdUsuario { get; set; }
         public string Descricao { get; set; }
         public string Tipo { get; set; }
+        public string TipoGrafico { get; set; }
         public short Ordem { get; set; }
         public DateTime? DataCriacao { get; set; }
         public Usuario UsuarioCriacao { get; set; }

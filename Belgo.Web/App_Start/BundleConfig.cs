@@ -33,6 +33,11 @@ namespace Belgo.Web
             //font-awesome
             bundles.Add(new StyleBundle("~/Content/FontAwesome").Include("~/Content/font-awesome.css"));
 
+            //Highchart bundle 
+            bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
+                     "~/Scripts/Highcharts-4.0.1/js/highcharts.js"
+                        ));
+
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",

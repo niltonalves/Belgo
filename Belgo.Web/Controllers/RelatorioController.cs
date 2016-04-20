@@ -1,6 +1,9 @@
 ﻿using Belgo.Dados.Entidade;
 using Belgo.Web.Models;
 using Belgo.Web.Util;
+using DotNet.Highcharts;
+using DotNet.Highcharts.Enums;
+using DotNet.Highcharts.Options;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -41,6 +44,38 @@ namespace Belgo.Web.Controllers
 
             return View(retorno);
         }
+
+        public ActionResult Grafico(int id)
+        {
+            try
+            {
+                var api = new RestApi();
+                api.Method = Method.GET;
+                api.Resource = RestApi.Resources.Pesquisa;
+                api.Action = "relatorioparticipacao";
+                api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
+                var lista = api.Executar<PesquisaModel>();
+
+                var grafico = new Highcharts("chart")
+.InitChart(new Chart { DefaultSeriesType = ChartTypes.Line })
+        //overall Title of the chart 
+        .SetTitle(new Title { Text = "Incoming Transacions per hour" });
+
+
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+
+            }
+
+        }
+
+
+
 
         public ActionResult ExportarExcel(long id)
         {

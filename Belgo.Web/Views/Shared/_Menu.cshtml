@@ -1,8 +1,8 @@
 ﻿@{
     var usuario = Belgo.Web.Util.Comum.UsuarioLogado();
     var nome = usuario.Nome.Split(' ');
-    var primeiroNome = (nome[0]==null ? "" : nome[0]);
-    
+    var primeiroNome = (nome[0] == null ? "" : nome[0]);
+
 }
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -43,7 +43,7 @@
                 <li class="dropdown">
                     <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> @primeiroNome</a>
                     <ul class="dropdown-menu">
-                        <li><a href="@Url.Action("Cadastrar", "Usuario", new {menu = true})">Meus dados</a></li>
+                        <li><a href="@Url.Action("Cadastrar", "Usuario", new { menu = true })">Meus dados</a></li>
                         <li><a href="@Url.Action("Sair", "Login")">Sair</a></li>
                     </ul>
 

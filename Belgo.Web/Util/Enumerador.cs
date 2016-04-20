@@ -21,7 +21,17 @@ namespace Belgo.Web.Util
             [Description("Dissertativa")]
             D
         }
-
+        public enum TipoGrafico
+        {
+            [Description("Pizza")]
+            P = 1,
+            [Description("Coluna")]
+            C,
+            [Description("Barra")]
+            B,
+            [Description("Rosca")]
+            R
+        }
         public static string GetDescription(Enum en)
         {
             Type type = en.GetType();
