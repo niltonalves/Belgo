@@ -26,17 +26,16 @@ namespace Belgo.Web
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
             //bootstrap/
-            bundles.Add(new StyleBundle("~/Content/Bootstrap").Include("~/Content/bootstrap.css","~/Content/bootstrap-theme.css"));
+            bundles.Add(new StyleBundle("~/Content/Bootstrap").Include("~/Content/bootstrap.css", "~/Content/bootstrap-theme.css"));
             bundles.Add(new ScriptBundle("~/Scripts/Bootstrap").Include(
                         "~/Scripts/bootstrap.js"));
 
             //font-awesome
             bundles.Add(new StyleBundle("~/Content/FontAwesome").Include("~/Content/font-awesome.css"));
 
-            //Highchart bundle 
-            bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
-                     "~/Scripts/Highcharts-4.0.1/js/highcharts.js"
-                        ));
+            //google-chart bundle 
+            bundles.Add(new ScriptBundle("~/bundles/grafico").Include(
+                     "~/Scripts/google-charts/loader.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
@@ -52,6 +51,10 @@ namespace Belgo.Web
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            //functions
+            bundles.Add(new ScriptBundle("~/Scripts/functions").Include(
+            "~/Scripts/functions.js"));
 
             BundleTable.EnableOptimizations = false;
         }

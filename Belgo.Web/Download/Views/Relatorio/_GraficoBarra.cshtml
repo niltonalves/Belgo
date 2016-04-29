@@ -1,0 +1,70 @@
+﻿@model Belgo.Web.Models.PesquisaModel.RelatorioModel
+
+@{
+    var container = "pergunta_" + Model.ID;
+}
+
+<script>
+
+    $(function () {
+
+        $('#@container').highcharts({
+            chart: {
+                type: 'bar',
+                backgroundColor : '#fbfbfb',
+                options3d: {
+                    enabled: true,
+                    alpha: 1,
+                    beta: 0,
+                    depth: 50,
+                    viewDistance: 0
+                }
+
+
+            },
+            title: {
+                text: '@Html.Raw(Model.TituloPergunta)'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Participação'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">Resposta</span><br>',
+                pointFormat: '{point.name}: <b>{point.y:.0f}</b>'
+            },
+            series: [{
+                name: 'Descricao',
+                data: @Html.Raw(Model.DadosSerializados),
+                dataLabels: {
+                    enabled: false,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });
+    });
+
+</script>
+<div id="@container" style="width:100%;margin-bottom:80px;display:block"></div>

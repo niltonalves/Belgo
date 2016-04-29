@@ -1,0 +1,54 @@
+﻿@model Belgo.Web.Models.UsuarioModel
+@{
+    ViewBag.Title = "Cadastrar usuário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading gray">Dados do usuário</div>
+    @using (Html.BeginForm("Cadastrar", null, FormMethod.Post, new { autocomplete = "off" }))
+    {
+        <input type="hidden" name="menu" value="@Request["menu"]" />
+        @Html.HiddenFor(m => Model.ID)
+        @Html.HiddenFor(m => Model.SenhaAtual)
+
+        <div class="form-medio">
+            <div class="input-group">
+                <span class="input-group-addon">Nome</span>
+                @Html.TextBoxFor(m => Model.Nome, new { @class = "form-control input-normal", placeholder = "Nome do usuário", aria_describedby = "basic-addon1", required = "required", autofocus = "autofocus " })
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">E-mail</span>
+                @Html.TextBoxFor(m => Model.Email, new { @class = "form-control input-normal", placeholder = "Email do usuário", aria_describedby = "basic-addon1", required = "required", type = "email" })
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Senha</span>
+                @Html.PasswordFor(m => Model.Senha, new { @class = "form-control input-normal", placeholder = "Senha do usuário", aria_describedby = "basic-addon1", required = "required" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Salvar</button>
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $(".cancelar").click(function () {
+                history.back();
+            });
+
+            @if (Model.ID != 0)
+            {
+                <text>
+            $("#Email").attr("readonly", "true");
+            $("#Senha").val("@Model.SenhaAtual");
+            </text>
+            }
+        })
+    </script>
+}

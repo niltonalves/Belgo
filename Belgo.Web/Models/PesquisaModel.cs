@@ -14,6 +14,8 @@ namespace Belgo.Web.Models
         public PesquisaModel()
         {
             Perguntas = new List<PerguntaModel>();
+            Participacoes = new List<ParticipacaoModel>();
+            
         }
         public long ID { get; set; }
         public string Nome { get; set; }
@@ -21,15 +23,17 @@ namespace Belgo.Web.Models
         public long IdUsuarioCriacao { get; set; }
         public DateTime? DataCriacao { get; set; }
         public List<PerguntaModel> Perguntas { get; set; }
+        public List<ParticipacaoModel> Participacoes { get; set; }
         public int TotalPerguntas { get; set; }
-        //        public Usuario UsuarioCriacao { get; set; }
+        public int TotalParticipacao { get; set; }
 
         public class PerguntaModel
         {
             public PerguntaModel()
             {
-                this.Respostas = new List<RespostaModel>();
-                this.Participacoes = new List<ParticipacaoModel>();
+                Respostas = new List<RespostaModel>();
+                Participacoes = new List<ParticipacaoModel>();
+                Relatorio = new RelatorioModel();
             }
             public Int64 ID { get; set; }
             public Int64 IdPesquisa { get; set; }
@@ -42,6 +46,7 @@ namespace Belgo.Web.Models
             public Usuario UsuarioCriacao { get; set; }
             public List<RespostaModel> Respostas { get; set; }
             public List<ParticipacaoModel> Participacoes { get; set; }
+            public RelatorioModel Relatorio { get; set; }
         }
 
         public class RespostaModel
@@ -54,45 +59,19 @@ namespace Belgo.Web.Models
             public Usuario UsuarioCriacao { get; set; }
 
         }
+        public class RelatorioModel
+        {
 
+            public long ID { get; set; }
+            public string TituloPergunta { get; set; }
+            public string DadosSerializados { get; set; }
+            public class Grafico
+            {
+                public string Descricao { get; set; }
+                public int Total { get; set; }
+            }
 
-
-        ////Construtor
-        //public PesquisaModel()
-        //{
-        //    Perguntas = new List<PerguntaModel>();
-        //    Alternativas = new List<AlternativaModel>();
-        //}
-
-        //public int ID { get; set; }
-        //public string Nome { get; set; }
-        //public DateTime DataCadastro { get; set; }
-        //public DateTime DataPublicacao { get; set; }
-        //public StatusPergunta Status { get; set; }
-        //public List<PerguntaModel> Perguntas { get; set; }
-        //public List<AlternativaModel> Alternativas { get; set; }
-
-        //public class PerguntaModel
-        //{
-        //    public int ID { get; set; }
-        //    public string Titulo { get; set; }
-        //    public DateTime DataCadastro { get; set; }
-        //    public bool Ativo { get; set; }
-        //}
-
-        //public class AlternativaModel
-        //{
-        //    public int ID { get; set; }
-        //    public string Titulo { get; set; }
-        //    public TipoResposta Tipo { get; set; }
-
-        //    public enum TipoResposta
-        //    {
-        //        MultiplaEscolha = 1,
-        //        Dissertativa,
-        //        Outras
-        //    }
-        //}
+        }
         public enum StatusPergunta
         {
             Publicado,

@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" sizes="57x57" href="~/Content/images/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Content/images/icons/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Content/images/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Content/images/icons/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Content/images/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Content/images/icons/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="~/Content/images/icons/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Content/images/icons/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/images/icons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/images/icons/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/images/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="~/Content/images/icons/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Content/images/icons/favicon-16x16.png" />
+    <link rel="manifest" href="~/Scripts/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/Content/images/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#3d3d3d">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <title>Belgo</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scritps/Bootstrap")
+
+</head>
+
+<body class="fundo-login">
+    @TempData["hash"]
+
+    @using (Html.BeginForm("Index", null, FormMethod.Post, new { @class = "form-login" }))
+    {
+        <div class="container">
+            
+            <div class="row">
+
+                <div class="Absolute-Center is-Responsive ">
+                    
+                    <div class="form-login fundo-cinza gray">
+
+                        <div class="text-center">
+                            <a class="text-center" href="#"><img src="@Url.Content("~/Content/Images")/logo_topo.png"></a>
+                        </div>
+                        <div style="clear:both"></div>
+                        <div class="form-group text-center "><strong>Tela de Acesso - Belgo Quest</strong></div>
+                        <div style="clear:both"></div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="E-mail de acesso" required autofocus>
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha de acesso" required>
+                        </div>
+                        <button class="btn btn-lg btn-danger btn-block" type="submit">Entrar</button>
+                    </div> <!-- /container -->
+                    <br />
+                    @Html.Partial("_alertas")
+                   
+                </div>
+            </div>
+        </div>
+    }
+
+
+</body>
+</html>

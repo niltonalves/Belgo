@@ -103,8 +103,7 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-
-                var ordem = db.CAD_PERGUNTA.Where(p => p.COD_PERGUNTA == pergunta.ID).Max(p => p.NUM_ORDEM_PERGUNTA) + 1;
+                var ordem = Convert.ToInt32(db.CAD_PERGUNTA.Where(p => p.COD_PESQUISA == pergunta.IdPesquisa).Max(p => p.NUM_ORDEM_PERGUNTA)) + 1;
 
                 var cadastro = new CAD_PERGUNTA()
                 {
@@ -113,7 +112,7 @@ namespace Belgo.Data.Negocio
                     DTA_CRIACAO = DateTime.Now,
                     NUM_ORDEM_PERGUNTA = ordem,
                     IND_TPO_PERGUNTA = pergunta.Tipo,
-                    IND_TPO_GRAFICO = pergunta.TipoGrafico,
+                    IND_TPO_GRAFICO = (pergunta.TipoGrafico == null ? "A" : pergunta.TipoGrafico),
                     COD_USER_CRIACAO = pergunta.IdUsuario
                 };
 
@@ -136,8 +135,8 @@ namespace Belgo.Data.Negocio
                 var cadastro = this.ConsultarPergunta(pergunta.ID);
 
                 cadastro.DSC_PERGUNTA = string.IsNullOrEmpty(pergunta.Descricao) ? cadastro.DSC_PERGUNTA : pergunta.Descricao;
-                cadastro.NUM_ORDEM_PERGUNTA = (pergunta.Ordem==0) ? cadastro.NUM_ORDEM_PERGUNTA : pergunta.Ordem;
-                cadastro.IND_TPO_GRAFICO = pergunta.TipoGrafico;
+                cadastro.NUM_ORDEM_PERGUNTA = (pergunta.Ordem == 0) ? cadastro.NUM_ORDEM_PERGUNTA : pergunta.Ordem;
+                cadastro.IND_TPO_GRAFICO = (string.IsNullOrEmpty(pergunta.TipoGrafico) ? cadastro.IND_TPO_GRAFICO : pergunta.TipoGrafico);
 
                 db.Entry(cadastro).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

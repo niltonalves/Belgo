@@ -1,0 +1,95 @@
+﻿@model List<Belgo.Web.Models.PesquisaModel>
+@{
+    ViewBag.Title = "Relatório";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="clearfix"></p>
+
+
+<div class="panel panel-default">
+
+    @using (Html.BeginForm("Publicar", null, FormMethod.Post))
+    {
+        <!-- Table -->
+        <table class="table table-hover">
+            <thead>
+                <tr class="gray">
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th class="text-center">Total de Perguntas</th>
+                    <th class="text-center">Total de Participação</th>
+                    <th class="text-center">Data do Cadastro</th>
+                    <th>Status</th>
+                    <th class="text-center">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{foreach (var item in Model)
+                    {
+                        var totalPerguntas = item.Perguntas.Count();
+                        <tr>
+                            <td>@item.ID</td>
+                            <td>@item.Nome</td>
+                            <td class="text-center">@totalPerguntas</td>
+                            <td class="text-center">@item.TotalParticipacao</td>
+                            <td class="text-center">@(Convert.ToDateTime(item.DataCriacao).ToString("dd/MM/yyyy HH:mm"))</td>
+                            <td>
+                                <span aria-hidden="true" class="glyphicon @(item.Fechado ? "glyphicon-ok green" : "glyphicon-pencil red") "></span> @(item.Fechado ? " Publicado" : " Editando" )
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Grafico", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red" title="Gerar gráficos" data-tooltip="tooltip">
+                                    <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                                </a>
+
+                                <a href="@Url.Action("ExportarExcel", new { id = item.ID })" role="button" class="btn btn-default btn-xs editar red" title="Exportar para Excel" data-tooltip="tooltip">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                                </a>
+                             
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+                    }
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-visualizar">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            $('#modal-excluir, #modal-visualizar').on('show.bs.modal', function (e) {
+                var $modal = $(this);
+                var id = $(e.relatedTarget).attr("data-id");
+                var acao = $(e.relatedTarget).attr("data-acao");
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    url: "@Url.Content("~/Pesquisa/")" + acao,
+                    data: { "id": id },
+                    success: function (data) {
+                        $modal.find('.modal-content').html(data);
+                    }
+                });
+            })
+
+        });
+    </script>
+}
+
+

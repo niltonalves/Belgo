@@ -157,3 +157,16 @@ hr {
         }
       }
 
+.preloader {
+    height:350px; background:url(images/loading.gif) center center no-repeat;
+}
+
+#chart_wrap {
+    position: relative;
+    padding-bottom: 100%;
+
+}
+#chart {
+    position: absolute;
+    width:100%;
+}

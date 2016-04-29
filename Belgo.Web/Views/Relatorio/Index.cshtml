@@ -18,6 +18,7 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th class="text-center">Total de Perguntas</th>
+                    <th class="text-center">Total de Participação</th>
                     <th class="text-center">Data do Cadastro</th>
                     <th>Status</th>
                     <th class="text-center">Ação</th>
@@ -31,6 +32,7 @@
                             <td>@item.ID</td>
                             <td>@item.Nome</td>
                             <td class="text-center">@totalPerguntas</td>
+                            <td class="text-center">@item.TotalParticipacao</td>
                             <td class="text-center">@(Convert.ToDateTime(item.DataCriacao).ToString("dd/MM/yyyy HH:mm"))</td>
                             <td>
                                 <span aria-hidden="true" class="glyphicon @(item.Fechado ? "glyphicon-ok green" : "glyphicon-pencil red") "></span> @(item.Fechado ? " Publicado" : " Editando" )

@@ -23,28 +23,31 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-
-                var retorno = (from p in db.CAD_PESQUISA
-                              .Include("CAD_PERGUNTA")
-                               .Include("CAD_PERGUNTA.CAD_RESPOSTA")
-                               select p).AsEnumerable()
-                              .Select(a => new Pesquisa
-                              {
-                                  ID = a.COD_PESQUISA,
-                                  Nome = a.NOM_PESQUISA,
-                                  Fechado = a.IND_FECHADO ?? false,
-                                  DataCriacao = a.DTA_CRIACAO,
-                                  Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                using (var context = new Entities())
+                {
+                    var retorno = (from p in context.CAD_PESQUISA
+                                  .Include("CAD_PERGUNTA")
+                                   .Include("CAD_PERGUNTA.CAD_RESPOSTA")
+                                   select p).AsEnumerable()
+                                  .Select(a => new Pesquisa
                                   {
-                                      Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
+                                      ID = a.COD_PESQUISA,
+                                      Nome = a.NOM_PESQUISA,
+                                      Fechado = a.IND_FECHADO ?? false,
+                                      DataCriacao = a.DTA_CRIACAO,
+                                      Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                                      {
+                                          Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList()
 
-                                  }).OrderBy(c => c.Ordem).ToList()
-                              }).OrderBy(p => p.DataCriacao).ToList();
+                                      }).OrderBy(c => c.Ordem).ToList(),
+                                      TotalParticipacao = context.CAD_PARTICIPACAO.Where(b => a.COD_PESQUISA == b.CAD_PERGUNTA.COD_PESQUISA).Select(c => c.TX_TOKEN).Distinct().Count()
+                                  }).OrderBy(p => p.DataCriacao).ToList();
 
-                if (fechado != null)
-                    retorno = retorno.Where(c => c.Fechado == fechado).ToList();
+                    if (fechado != null)
+                        retorno = retorno.Where(c => c.Fechado == fechado).ToList();
 
-                return retorno;
+                    return retorno;
+                }
             }
             catch (Exception ex)
             {
@@ -189,32 +192,42 @@ namespace Belgo.Data.Negocio
         {
             try
             {
-                var retorno = (from p in db.CAD_PESQUISA
-                                               .Include("CAD_PERGUNTA")
-                                              .Include("CAD_PERGUNTA.CAD_RESPOSTA")
-                                        .Include("CAD_PERGUNTA.CAD_PARTICIPACAO")
 
-                               select p).Where(e => e.COD_PESQUISA==id & e.CAD_PERGUNTA.Any(r => r.CAD_PARTICIPACAO.Count() != 0))
-                               .AsEnumerable()
-                                .Select(a => new Pesquisa()
-                                {
-                                    Nome = a.NOM_PESQUISA,
-                                    Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
+                using (var context = new Entities())
+                {
+                    var totalParticipacao = context.CAD_PARTICIPACAO.Where(a => a.CAD_PERGUNTA.COD_PESQUISA == id).Select(a => a.TX_TOKEN).Distinct().Count();
+
+                    var retorno = (from p in context.CAD_PESQUISA
+                                                   .Include("CAD_PERGUNTA")
+                                                  .Include("CAD_PERGUNTA.CAD_RESPOSTA")
+                                            .Include("CAD_PERGUNTA.CAD_PARTICIPACAO")
+
+                                   select p).Where(b => b.COD_PESQUISA == id & b.CAD_PERGUNTA.Any(c => c.CAD_PARTICIPACAO.Count() != 0))
+                                   .AsEnumerable()
+                                    .Select(a => new Pesquisa()
                                     {
-                                        Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList(),
-                                        Participacoes = b.CAD_PARTICIPACAO.Select(p => new Participacao()
+                                        Nome = a.NOM_PESQUISA,
+                                        Perguntas = a.CAD_PERGUNTA.Select(b => new Pergunta(Comum.TrataPergunta(b))
                                         {
-                                            RespostaNula = p.IND_RESPOSTA_NULA,
-                                            DataParticipacao = Convert.ToDateTime(p.DTA_PARTICIPACAO).ToString("DD/mm/yyyy HH:MM:ss"),
-                                            DataSincronizacao = Convert.ToDateTime(p.DTA_SINCRONIZACAO).ToString("DD/mm/yyyy HH:MM:ss"),
-                                            Descricao = p.DSC_RESPOSTA_DISSERTATIVA,
-                                            IdResposta = p.COD_RESPOSTA,
-                                            IdPergunta = p.COD_PERGUNTA
-                                        }).ToList()
-                                    }).ToList()
-                                }).FirstOrDefault();
+                                            Respostas = b.CAD_RESPOSTA.Select(c => (Comum.TrataResposta(c))).ToList(),
+                                            Participacoes = b.CAD_PARTICIPACAO.Select(p => new Participacao()
+                                            {
+                                                RespostaNula = p.IND_RESPOSTA_NULA,
+                                                DataParticipacao = Convert.ToDateTime(p.DTA_PARTICIPACAO).ToString("DD/mm/yyyy HH:MM:ss"),
+                                                DataSincronizacao = Convert.ToDateTime(p.DTA_SINCRONIZACAO).ToString("DD/mm/yyyy HH:MM:ss"),
+                                                Descricao = p.DSC_RESPOSTA_DISSERTATIVA,
+                                                IdResposta = p.COD_RESPOSTA,
+                                                IdPergunta = p.COD_PERGUNTA,
+                                            }).ToList()
 
-                return retorno;
+                                        }).OrderBy(p => p.Ordem).ToList(),
+                                        TotalParticipacao = totalParticipacao
+                                    }).FirstOrDefault();
+
+                    return retorno;
+
+                }
+
             }
             catch (Exception ex)
             {

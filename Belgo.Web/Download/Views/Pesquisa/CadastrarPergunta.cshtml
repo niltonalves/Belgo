@@ -1,0 +1,165 @@
+﻿@model Belgo.Web.Models.PesquisaModel.PerguntaModel
+
+@{
+    ViewBag.Title = "Cadastrar Pesquisa - Pergunta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="panel panel-default " data-toggle="validator">
+    <div class="panel-heading gray">Dados da pergunta</div>
+
+    @using (Html.BeginForm("CadastrarPergunta", null, FormMethod.Post))
+    {
+        @Html.HiddenFor(m => Model.IdPesquisa)
+        @Html.HiddenFor(m => Model.ID)
+        <div class="form-medio">
+            @if (ViewBag.Perguntas != null)
+            {
+                <div class="input-group">
+                    <span class="input-group-addon">Mudar pergunta</span>
+                    @Html.DropDownListFor(m => Model.ID, new SelectList(ViewBag.Perguntas, "ID", "Descricao"), new { @class = "form-control input-normal select-pergunta", placeholder = "Digite o título da pergunta", required = "required" })
+                </div>
+                <br />
+                <hr />
+                <br />
+            }
+            <div class="input-group">
+                <span class="input-group-addon">Título da pergunta</span>
+                @Html.TextBoxFor(m => Model.Descricao, new { @class = "form-control input-normal", placeholder = "Digite o título da pergunta", required = "required" })
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Tipo da pergunta&nbsp;&nbsp;&nbsp;</span>
+                @Html.DropDownListFor(m => Model.Tipo, new SelectList(ViewBag.TiposPergunta, "Id", "Name"), new { @class = "form-control input-normal ", placeholder = "Digite o título da pergunta", required = "required" })
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Tipo de gráfico&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                @Html.DropDownListFor(m => Model.TipoGrafico, new SelectList(ViewBag.TiposGrafico, "Id", "Name"), new { @class = "form-control input-normal ", required = "required" })
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Cadastrar", new {id = Model.IdPesquisa })" role="button" class="btn btn-default cancelar">Voltar</a>
+                <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>
+            </div>
+
+            @if (Model.ID != 0 & Model.Tipo != "D")
+            {
+                <hr />
+
+                <div class="pull-right">
+                    <button type="button" class="btn btn-link" title="Cadastrar nova resposta" data-tooltip="tooltip" data-toggle="modal" data-id-pergunta="@Model.ID" data-id-pesquisa="@Model.IdPesquisa" data-target="#modal-cadastrar-resposta" data-acao="CadastrarResposta">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Nova resposta
+                    </button>
+                </div>
+                <p class="clearfix"></p>
+
+                if (Model.Respostas.Count > 0)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading gray">Respostas cadastradas</div>
+                        <table class="table table-hover perguntas">
+                            <thead>
+                                <tr class="gray">
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th class="text-center">Data do Cadastro</th>
+                                    <th class="text-center">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="sort">
+                                @{foreach (var item in Model.Respostas)
+                                    {
+                                        <tr>
+                                            <td>@item.ID</td>
+                                            <td>@item.Descricao</td>
+                                            <td class="text-center">@item.DataCriacao</td>
+                                            <td class="text-center">
+                                                <button type="button" role="button" class="btn btn-default btn-xs editar red" title="Editar" data-id="@item.ID" data-id-pesquisa="@Model.IdPesquisa" data-id-pergunta="@item.IdPergunta" data-acao="CadastrarResposta" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-cadastrar-resposta">
+                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default btn-xs editar red" title="Excluir" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-excluir" data-id="@item.ID" data-id-pergunta="@item.IdPergunta" data-id-pesquisa="@Model.IdPesquisa" data-acao="ExcluirResposta">
+                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="panel panel-default">
+                                            <br />
+                                            <p class="text-center">
+                                                Não há respostas cadastradas.
+                                            </p>
+                                        </div>
+                                        }
+                                    }
+        </div>
+                                    }
+</div>
+<!--modal excluir-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-cadastrar-resposta">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+
+
+            if($("#Tipo").val()=="D"){
+                $("#TipoGrafico").disable(true);
+            
+            }
+
+            $("#Tipo").on("change", function(){
+                if($(this).val()=="D")
+                {
+                    $("#TipoGrafico").disable(true);
+                }else{
+                    $("#TipoGrafico").disable(false);
+                }
+
+            });
+
+            @if (Model.ID!=0)
+            {
+                <text>$("#Tipo").attr("disabled", true);</text>
+            }
+
+            $(".select-pergunta").on("change", function () {
+                window.location.href = "@Url.Content("~/Pesquisa/CadastrarPergunta/")" + this.value + "?idPesquisa=" + @Model.IdPesquisa;
+            });
+
+            $('#modal-cadastrar-resposta, #modal-excluir').on('show.bs.modal', function (e) {
+                var $modal = $(this);
+                var id = $(e.relatedTarget).attr("data-id");
+                var idPergunta = $(e.relatedTarget).attr("data-id-pergunta");
+                var idPesquisa = $(e.relatedTarget).attr("data-id-pesquisa");
+                var acao = $(e.relatedTarget).attr("data-acao");
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    url: "@Url.Content("~/Pesquisa/")" + acao,
+                    data: { "id": id, "idPergunta": idPergunta, "idPesquisa": idPesquisa },
+                    success: function (data) {
+                        $modal.find('.modal-content').html(data);
+                    }
+                });
+            })
+
+        });
+    </script>
+}

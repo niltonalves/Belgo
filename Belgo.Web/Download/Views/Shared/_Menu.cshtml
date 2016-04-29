@@ -1,0 +1,53 @@
+﻿@{
+    var usuario = Belgo.Web.Util.Comum.UsuarioLogado();
+    var nome = (usuario == null ? string.Empty : usuario.Nome.Split(' ')[0]);
+
+}
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Content/Images")/logo_topo.png" class="img-responsive"></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Acesso</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "Usuario")">Listar Usuários</a></li>
+                        <li><a href="@Url.Action("Cadastrar", "Usuario")">Cadastrar Usuário</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Gerenciar Pesquisas</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "Pesquisa")">Listar Pesquisas</a></li>
+                        <li><a href="@Url.Action("Cadastrar", "Pesquisa")">Cadastrar Pesquisas</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-angle-down"></i> Relatórios</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "Relatorio")">Pesquisa</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="dropdown">
+                    <a style="height:55px;text-transform:capitalize" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-user"></i> @nome.ToLower()</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Cadastrar", "Usuario", new { menu = true })">Meus dados</a></li>
+                        <li><a href="@Url.Action("Sair", "Login")">Sair</a></li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>

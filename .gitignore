@@ -279,3 +279,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Belgo.Web/Web.config
+/Belgo.Web/Web.Release.config
+/Belgo.Web/Web.Debug.config

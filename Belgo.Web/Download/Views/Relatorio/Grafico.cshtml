@@ -1,0 +1,12 @@
+﻿@model Belgo.Web.Models.PesquisaModel
+
+@{
+    ViewBag.Title = "Grafico";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var pergunta in Model.Perguntas)
+{
+    @Html.Action("GraficoDados", pergunta);
+    
+}

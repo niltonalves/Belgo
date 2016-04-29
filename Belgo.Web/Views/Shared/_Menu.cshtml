@@ -1,7 +1,6 @@
 ﻿@{
     var usuario = Belgo.Web.Util.Comum.UsuarioLogado();
-    var nome = usuario.Nome.Split(' ');
-    var primeiroNome = (nome[0] == null ? "" : nome[0]);
+    var nome = (usuario == null ? string.Empty : usuario.Nome.Split(' ')[0]);
 
 }
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -13,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="@Url.Content("~/Content/Images")/logo_topo.png" class="img-responsive"></a>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Content/Images")/logo_topo.png" class="img-responsive"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -41,7 +40,7 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li class="dropdown">
-                    <a style="height:55px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> @primeiroNome</a>
+                    <a style="height:55px;text-transform:capitalize" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-user"></i> @nome.ToLower()</a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Cadastrar", "Usuario", new { menu = true })">Meus dados</a></li>
                         <li><a href="@Url.Action("Sair", "Login")">Sair</a></li>

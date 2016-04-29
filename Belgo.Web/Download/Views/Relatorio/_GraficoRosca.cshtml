@@ -1,0 +1,35 @@
+﻿@model Belgo.Web.Models.PesquisaModel.RelatorioModel
+
+@{
+    var container = "pergunta_" + Model.ID;
+}
+
+<script>
+    $(function () {
+
+        $('#@container').highcharts({
+            chart: {
+                type: 'pie',
+                backgroundColor : '#fbfbfb',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+            },
+            title: {
+                text: '@Html.Raw(Model.TituloPergunta)'
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                }
+            },
+            series: [{
+                name: 'Participação',
+                data: @Html.Raw(Model.DadosSerializados)
+            }]
+        });
+    });
+</script>
+<div id="@container" style="width:100%;margin-bottom:80px;display:block"></div>

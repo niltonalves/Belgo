@@ -18,5 +18,6 @@ namespace Belgo.Dados.Entidade
         public DateTime? DataCriacao { get; set; }
         public List<Pergunta> Perguntas { get; set; }
         public Usuario UsuarioCriacao { get; set; }
+        public int TotalParticipacao { get; set; }
     }
 }

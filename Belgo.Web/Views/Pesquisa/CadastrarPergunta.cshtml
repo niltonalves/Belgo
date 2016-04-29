@@ -25,7 +25,7 @@
             }
             <div class="input-group">
                 <span class="input-group-addon">Título da pergunta</span>
-                @Html.TextBoxFor(m => Model.Descricao, new { @class = "form-control input-normal", placeholder = "Digite o título da pergunta", required = "required" })
+                @Html.TextBoxFor(m => Model.Descricao, new { @class = "form-control input-normal", placeholder = "Digite o título da pergunta", required = "required" , autofocus = ""})
             </div>
             <div class="input-group">
                 <span class="input-group-addon">Tipo da pergunta&nbsp;&nbsp;&nbsp;</span>
@@ -36,7 +36,7 @@
                 @Html.DropDownListFor(m => Model.TipoGrafico, new SelectList(ViewBag.TiposGrafico, "Id", "Name"), new { @class = "form-control input-normal ", required = "required" })
             </div>
             <div class="modal-footer">
-                <a href="@Url.Action("Cadastrar", new {id = Model.IdPesquisa })" role="button" class="btn btn-default cancelar">Cancelar</a>
+                <a href="@Url.Action("Cadastrar", new {id = Model.IdPesquisa })" role="button" class="btn btn-default cancelar">Voltar</a>
                 <button type="submit" class="btn btn-danger">@(Model != null ? "Salvar" : "Cadastrar")</button>
             </div>
 
@@ -118,6 +118,22 @@
     <script>
         $(function () {
 
+
+            if($("#Tipo").val()=="D"){
+                $("#TipoGrafico").disable(true);
+            
+            }
+
+            $("#Tipo").on("change", function(){
+                if($(this).val()=="D")
+                {
+                    $("#TipoGrafico").disable(true);
+                }else{
+                    $("#TipoGrafico").disable(false);
+                }
+
+            });
+
             @if (Model.ID!=0)
             {
                 <text>$("#Tipo").attr("disabled", true);</text>
@@ -142,6 +158,8 @@
                         $modal.find('.modal-content').html(data);
                     }
                 });
+                //fix focus
+                $(this).find('[autofocus]').focus();
             })
 
         });

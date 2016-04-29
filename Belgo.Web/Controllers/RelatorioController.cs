@@ -1,48 +1,43 @@
 ﻿using Belgo.Dados.Entidade;
 using Belgo.Web.Models;
 using Belgo.Web.Util;
-using DotNet.Highcharts;
-using DotNet.Highcharts.Enums;
-using DotNet.Highcharts.Options;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
 using System.Web.UI.WebControls;
-using static Belgo.Web.Controllers.BaseController;
 using static Belgo.Web.Models.PesquisaModel;
+using static Belgo.Web.Util.Enumerador;
+using Newtonsoft.Json;
+using System.Collections;
 
 namespace Belgo.Web.Controllers
 {
     public class RelatorioController : BaseController
     {
+        public object ChartsData { get; private set; }
+
         public ActionResult Index()
         {
-            var api = new RestApi();
-            api.Method = Method.GET;
-            api.Resource = RestApi.Resources.Pesquisa;
-            api.Action = "fechado";
-            api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "fechado", Value = "sim" });
-            var lista = api.Executar<List<Pesquisa>>();
-
-            var retorno = lista.Data.Select(p => new PesquisaModel
+            try
             {
-                ID = p.ID,
-                Nome = p.Nome,
-                DataCriacao = p.DataCriacao,
-                Fechado = p.Fechado,
-                Perguntas = p.Perguntas.Select(i => new PerguntaModel() { ID = i.ID }).ToList()
+                var api = new RestApi();
+                api.Method = Method.GET;
+                api.Resource = RestApi.Resources.Pesquisa;
+                api.Action = "fechado";
+                api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "fechado", Value = "sim" });
+                var lista = api.Executar<List<PesquisaModel>>();
 
-            }).ToList();
+                return View(lista.Data);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
 
-
-            return View(retorno);
+            }
         }
 
         public ActionResult Grafico(int id)
@@ -56,14 +51,15 @@ namespace Belgo.Web.Controllers
                 api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
                 var lista = api.Executar<PesquisaModel>();
 
-                var grafico = new Highcharts("chart")
-.InitChart(new Chart { DefaultSeriesType = ChartTypes.Line })
-        //overall Title of the chart 
-        .SetTitle(new Title { Text = "Incoming Transacions per hour" });
+                //não há dado
+                if (lista.Data == null)
+                {
+                    MostrarAlerta(TipoAlerta.Erro, "Não há dados para geração do gráfico.");
+                    return RedirectToAction("Index");
+                }
+                
 
-
-
-                return View();
+                return View(lista.Data);
             }
             catch (Exception ex)
             {
@@ -73,10 +69,6 @@ namespace Belgo.Web.Controllers
             }
 
         }
-
-
-
-
         public ActionResult ExportarExcel(long id)
         {
             try
@@ -86,7 +78,7 @@ namespace Belgo.Web.Controllers
                 api.Resource = RestApi.Resources.Pesquisa;
                 api.Action = "relatorioparticipacao";
                 api.AdicionarParametro(new RestSharp.Parameter() { Type = ParameterType.UrlSegment, Name = "id", Value = id });
-                var lista = api.Executar<Pesquisa>();
+                var lista = api.Executar<PesquisaModel>();
 
                 if (lista.Data == null)
                 {
@@ -101,10 +93,11 @@ namespace Belgo.Web.Controllers
 
 
                 //total de participacao
-                var total = pesquisa.Perguntas.Max(c => c.Participacoes.Count);
+
+                var total = pesquisa.TotalParticipacao;
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<table width='800' cellspacing='0' cellpadding='2'>");
-                sb.Append("<tr><td align='center' style='background-color: #e31d1a;color:#ffffff' colspan = '3' height='50px'><b>" + pesquisa.Nome + "</b></td></tr>");
+                sb.Append("<tr><td align='center' style='background-color: #e31d1a;color:#ffffff' colspan = '3' height='50px'><font face='4'><b>" + pesquisa.Nome + "</b></font></td></tr>");
                 sb.Append("<tr><td colspan = '3'></td></tr>");
                 sb.Append("<tr><td><b>Total de participações: </b> " + total + "</td><td></td><td><b>Data: </b>" + DateTime.Now + " </td></tr>");
                 sb.Append("</table>");
@@ -117,14 +110,13 @@ namespace Belgo.Web.Controllers
                     {
                         sb.Append("<tr height='50'>");
                         sb.Append(string.Format("<td style='background-color: #dfdfdf;width:5.5px' ><b>{0}</b></td>", pergunta.Descricao));
-                        sb.Append("<td style='background-color: #dfdfdf' ></td>");
-                        sb.Append(string.Format("<td style='background-color: #dfdfdf' ><b>{0}</b></td>", descricaoTipo));
+                        sb.Append(string.Format("<td style='background-color: #dfdfdf;width:5.5px' ><b></b></td>"));
+                        sb.Append(string.Format("<td style='background-color: #dfdfdf'><b>{0}</b></td>", descricaoTipo));
                         sb.Append("</tr>");
                         foreach (var particpacao in pergunta.Participacoes.Where(c => !String.IsNullOrEmpty(c.Descricao)))
                         {
                             sb.Append("<tr>");
-                            sb.Append(string.Format("<td>{0}</td>", particpacao.Descricao));
-                            sb.Append("<td></td>");
+                            sb.Append(string.Format("<td colspan='3'>{0}</td>", particpacao.Descricao));
                             sb.Append("</tr>");
                         }
                     }

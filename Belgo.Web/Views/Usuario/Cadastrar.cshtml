@@ -6,7 +6,7 @@
 <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading gray">Dados do usuário</div>
-    @using (Html.BeginForm("Cadastrar", null, FormMethod.Post))
+    @using (Html.BeginForm("Cadastrar", null, FormMethod.Post, new { autocomplete = "off" }))
     {
         <input type="hidden" name="menu" value="@Request["menu"]" />
         @Html.HiddenFor(m => Model.ID)
@@ -47,7 +47,7 @@
                 <text>
             $("#Email").attr("readonly", "true");
             $("#Senha").val("@Model.SenhaAtual");
-                </text>
+            </text>
             }
         })
     </script>

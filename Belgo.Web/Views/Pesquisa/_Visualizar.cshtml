@@ -71,7 +71,7 @@
             {
                 var contemPergunta = Model.Perguntas.Count() > 0;
 
-                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-default" data-dismiss="modal">Fechar</button>
                 <button type="submit" role="button" class="btn btn-danger @(contemPergunta ? "" : "disabled" )" data-tooltip="tooltip" title="@(contemPergunta ? "" : "Não há como publicar pesquisa sem pergunta." )">
                     Publicar
                 </button>

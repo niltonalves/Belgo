@@ -1,0 +1,108 @@
+﻿@model List<Belgo.Web.Models.UsuarioModel>
+@{
+    ViewBag.Title = "Usuários";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pull-right">
+    <a href="@Url.Action("Cadastrar")" role="link" class="btn btn-link" title="Cadastrar novo usuário" data-tooltip="tooltip">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Novo usuário
+    </a>
+</div>
+<p class="clearfix"></p>
+
+<div class="panel panel-default">
+
+    <!-- Default panel contents -->
+    <div class="panel-heading gray">Usuários Cadastrados</div>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <thead>
+            <tr class="gray">
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th class="text-center">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ID</td>
+                        <td>@item.Nome</td>
+                        <td>@item.Email</td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Cadastrar", new { id = item.ID })" type="button" class="btn btn-default btn-xs editar red" title="Editar" data-tooltip="tooltip">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </a>
+                            @*<button type="button" class="btn btn-default btn-xs red" title="Resetar senha" data-tooltip="tooltip" data-toggle="modal" data-target="#modal-troca-senha">
+                                <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                            </button>*@
+                            <button type="button" class="btn btn-default btn-xs red" title="Excluir" data-tooltip="tooltip" data-id="@item.ID" data-acao="Excluir" data-target="#modal-excluir" data-toggle="modal">
+                                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                            </button>
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<!--modal troca de senha-->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-troca-senha">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Resetar senha</h4>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja resetar a senha deste usuário?&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a href="@Url.Action("Resetar", new {id = 0 })" role="button" class="btn btn-danger">Resetar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function () {
+
+            $('#modal-excluir, #modal-visualizar').on('show.bs.modal', function (e) {
+                var $modal = $(this);
+                var id = $(e.relatedTarget).attr("data-id");
+                var acao = $(e.relatedTarget).attr("data-acao");
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    url: "@Url.Content("~/Usuario/")" + acao,
+                    data: { "id": id },
+                    success: function (data) {
+                        $modal.find('.modal-content').html(data);
+                    }
+                });
+            })
+
+        });
+    </script>
+}
+

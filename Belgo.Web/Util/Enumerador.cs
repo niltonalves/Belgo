@@ -23,8 +23,10 @@ namespace Belgo.Web.Util
         }
         public enum TipoGrafico
         {
+            [Description("Padrão")]
+            A = 0,
             [Description("Pizza")]
-            P = 1,
+            P,
             [Description("Coluna")]
             C,
             [Description("Barra")]
