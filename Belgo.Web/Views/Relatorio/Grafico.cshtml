@@ -9,9 +9,9 @@
 <label>@Model.Nome</label>
 <p class="small">Total de participações: @Model.TotalParticipacao</p>
 <script type="text/javascript">
-    $(window).resize(function(){
-        grafico();
-    });
+    //$(window).resize(function(){
+    //    grafico();
+    //});
 
 
     google.charts.load("current", { packages: ['corechart','table'] });
@@ -20,81 +20,89 @@
         var dados = "";
         @{
 
+
             foreach (var pergunta in Model.Perguntas.ToList())
             {
-                var dados = new List<object>().Select(t => new { Descricao = default(string), Total = default(int) });
+                var dados = new List<object>().Select(t => new { Descricao = default(string), Total = default(int), Porcetagem = default(string) });
 
                 if (pergunta.Tipo == "D") {
-                    dados = pergunta.Participacoes.Where(p => p.Descricao != "").Select(p => new { Descricao = p.Descricao, Total = 0 }).ToList();
+                    dados = pergunta.Participacoes.Where(p => p.Descricao != "").Select(p => new { Descricao = p.Descricao, Total = 0 , Porcetagem = ""}).ToList();
                 }
                 else {
-                    dados = pergunta.Respostas.Select(r => new { Descricao = r.Descricao, Total = pergunta.Participacoes.Count(c => c.IdResposta == r.ID) }).ToList();
+                    dados = pergunta.Respostas.Select(r => new {
+                        Descricao = r.Descricao,
+                        Total = pergunta.Participacoes.Count(c => c.IdResposta == r.ID),
+                        Porcetagem = pergunta.Participacoes.Count(c => c.IdPergunta == r.IdPergunta)>0 ? String.Format("{1:N}%", pergunta.Participacoes.Count(c => c.IdResposta == r.ID) , Math.Round(Convert.ToDecimal(pergunta.Participacoes.Count(c => c.IdResposta == r.ID) / Convert.ToDecimal(pergunta.Participacoes.Count(c => c.IdPergunta == r.IdPergunta)) * 100), 4)) : "0"
+                    }).ToList();
                 }
                 <text>
 
 
-        var dados = $.parseJSON('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(dados))');
+                var dados = $.parseJSON('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(dados))');
 
-        var data = new google.visualization.DataTable();
+                var data = new google.visualization.DataTable();
 
-        data.addColumn('string', 'Titulo');
-        data.addColumn('number', 'Total');
+                data.addColumn('string', 'Titulo');
+                data.addColumn('number', 'Total');
+                data.addColumn({type: 'string', role:'annotation'});
 
-        for (var i = 0; i < dados.length; i++) {
-            data.addRow([dados[i].Descricao, dados[i].Total]);
-        }
+                for (var i = 0; i < dados.length; i++) {
+                    data.addRow([dados[i].Descricao, dados[i].Total, dados[i].Porcetagem ]);
+            }
 
         @{
 
-            if (pergunta.Tipo == "D")
-            {
-                var texto = (dados.Count() > 0 ? "Texto" : "Não há dados para exibir");
+                if (pergunta.Tipo == "D")
+                {
+                    var texto = (dados.Count() > 0 ? "Texto" : "Não há dados para exibir");
 
                 <text>
-        data.setColumnLabel(0, "@Html.Raw(texto)");
-                data.removeColumns(1, 1);
-
-                var chart = new google.visualization.Table(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));
-        </text>
-
+                    data.setColumnLabel(0, "@Html.Raw(texto)");
+                    data.removeColumns(1, 1);
+                    var chart = new google.visualization.Table(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));
+                 </text>
+    
             }
-            else
-            {
-                switch (pergunta.TipoGrafico)
+                else
                 {
-                    case "C":
+                    switch (pergunta.TipoGrafico)
+                    {
+                        case "C":
                             <text>var chart = new google.visualization.ColumnChart(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));</text>
-                        break;
-                    case "R":
+                            break;
+                        case "R":
                             <text>var chart = new google.visualization.PieChart(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));</text>
-                        break;
-                    case "B":
+                            break;
+                        case "B":
                             <text>var chart = new google.visualization.BarChart(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));</text>
-                        break;
-                    default:
+                            break;
+                        default:
                             <text>var chart = new google.visualization.PieChart(document.getElementById('@string.Concat("grafico_", pergunta.ID)'));</text>
-                        break;
+                            break;
+                    }
+
                 }
-
-            }
             }
 
 
-        chart.draw(data,
-  {
-      title: "@Html.Raw(String.Concat(pergunta.Ordem, " - ", pergunta.Descricao))",
-      position: "top",
-      fontsize: "11px",
+            chart.draw(data,
+              {
+                title: "@Html.Raw(String.Concat(pergunta.Ordem, " - ", pergunta.Descricao))",
+                 // isStacked: 'percent',
+                  position: "top",
+                  fontsize: "11px",
+                
+                  alwaysOutside : true,
+               
+                  sliceVisibilityThreshold :0,
+                  is3D: @(pergunta.TipoGrafico == "R" ? "false" : "true"),
+                  titleTextStyle: {color: '3d3d3d', fontSize: 14},
+                  pieSliceText: 'none',
+                  legend: { textStyle: { color: 'gray' }, position: 'labeled' },
+                  chartArea: {@if (pergunta.TipoGrafico == "C") {<text> top: 55,height: '40%' </text>} else{<text>top: 50</text>}},
 
-      sliceVisibilityThreshold :0,
-      is3D: @(pergunta.TipoGrafico == "R" ? "false" : "true"),
-      titleTextStyle: {
-          color: '3d3d3d',
-          fontSize: 14
-      },
-      legend: { textStyle: { color: 'gray' } }
 
-  });
+              });
 
         </text>
             }
@@ -102,26 +110,38 @@
     }
 </script>
 @{
+    var cont = 1;
     foreach (var item in Model.Perguntas.ToList())
     {
-        if (item.Tipo == "D")
-        {
-            <div id="chart_wrsap" style="margin-bottom:25px;width:800px;margin-left:140px; font-family: arial">
-                <p><b>@Html.Raw(String.Concat(item.Ordem, " - ", item.Descricao))</b></p>
-                <div id="@string.Concat("grafico_", item.ID)">
-                    <div class="preloader"></div>
-                </div>
-            </div>
-        }
-        else
-        {
 
-            <div id="chart_wrsap" style="margin-bottom:15px;width:1000px;">
-                <div id="@string.Concat("grafico_", item.ID)">
+        var style = "";
+        if (cont == 3)
+        {
+            style = "page-break-after: always;page-break-inside: avoid; position:relative'";
+            cont = 0;
+        }
+        <div @style>
+           @if (item.Tipo == "D")
+            {
+            <div style="display:block !important;margin-bottom:55px;width:800px;margin-left:140px; font-family: arial">
+                <p><b>@Html.Raw(String.Concat(item.Ordem, " - ", item.Descricao))</b></p>
+                <div id="@string.Concat("grafico_", item.ID)" style="display:block !important;margin-bottom:25px;width:800px;margin-left:140px; font-family: arial;@style">
                     <div class="preloader"></div>
                 </div>
             </div>
-        }
+            }
+            else
+            {
+
+            <div style="margin-bottom:55px;width:1000px;min-height:300px; display:block !important;">
+                <div id="@string.Concat("grafico_", item.ID)" style="margin-bottom:15px;width:1000px;display:block !important;@style">
+                    <div class="preloader"></div>
+                </div>
+            </div>
+            }
+        </div>
+
+        cont++;
 
     }
 }

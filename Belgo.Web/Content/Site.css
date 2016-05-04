@@ -1,12 +1,11 @@
-﻿ html,
-      body {
-        height: 100%;
-        /* The html and body elements cannot have any padding or margin. */
-      }
+﻿html,
 body {
-    
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+body {
     font-family: 'Lato', sans-serif;
-    
 }
 
 
@@ -65,7 +64,7 @@ textarea {
     max-width: 600px;
     padding: 15px;
     margin: auto;
-    margin-top:-30px;
+    margin-top: -30px;
 }
 
 .fundo-cinza {
@@ -87,7 +86,6 @@ textarea {
         min-width: 320px;
         max-width: 500px;
         padding: 40px;
-        
     }
 
 h2 {
@@ -128,45 +126,64 @@ hr {
 
 
 
- /* Wrapper for page content to push down footer */
-      #wrap {
-        min-height: 100%;
-        height: auto !important;
-        height: 100%;
-        /* Negative indent footer by it's height */
-        margin: 0 auto -60px;
-      }
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
 
-      /* Set the fixed height of the footer here */
-      #push,
-      #footer {
-        height: 60px;
-        text-align:center;
-      }
-      #footer {
-        color:#888888;
-      }
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+    text-align: center;
+}
 
-      /* Lastly, apply responsive CSS fixes as necessary */
-      @media (max-width: 767px) {
-        #footer {
-          margin-left: -20px;
-          margin-right: -20px;
-          padding-left: 20px;
-          padding-right: 20px;
-        }
-      }
+#footer {
+    color: #888888;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
 
 .preloader {
-    height:350px; background:url(images/loading.gif) center center no-repeat;
+    height: 350px;
+    background: url(images/loading.gif) center center no-repeat;
 }
 
 #chart_wrap {
     position: relative;
     padding-bottom: 100%;
-
 }
+
 #chart {
     position: absolute;
-    width:100%;
+    width: 100%;
+}
+
+@page {
+    size: auto; /* auto is the initial value */
+    /* this affects the margin in the printer settings */
+    margin: 10mm 5mm 10mm 5mm;
+}
+@media screen{
+
+    
+
+}
+@media print {
+
+    .rodape {
+        display: none;
+    }
 }
